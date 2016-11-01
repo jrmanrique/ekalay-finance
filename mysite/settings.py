@@ -25,7 +25,9 @@ SECRET_KEY = 'p_umtd4#$*f5&oz0cfv6i558z6#61tl&r%ky5dn1!5(0ii+mr4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'ekalay-finance-jrmanrique.codeanyapp.com'
+]
 
 
 # Application definition
