@@ -1,0 +1,120 @@
+{% extends 'finance/base.html' %}
+{% load staticfiles %}
+
+{% block title %}Finance | eKalay{% endblock %}
+{% block links %}
+
+<!-- DataTables CSS -->
+<link href="{% static "finance/bootstrap/vendor/datatables-plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+
+<!-- DataTables Responsive CSS -->
+<link href="{% static "finance/bootstrap/vendor/datatables-responsive/dataTables.responsive.css" %}" rel="stylesheet">
+
+{% endblock %}
+
+<div class='container-fluid'>
+
+{% block body %}
+
+    <div class="row col-lg-12 panel-body">
+
+        {% if messages %}
+            {% include 'finance/message-template.html' %}
+        {% endif %}
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#summary" data-toggle="tab">Summary</a>
+            </li>
+            <li><a href="#inflows" data-toggle="tab">Cash Inflows</a>
+            </li>
+            <li><a href="#outflows" data-toggle="tab">Cash Outflows</a>
+            </li>
+            <li><a href="#chart" data-toggle="tab">Chart of Accounts</a>
+            </li>
+            <li><a href="#statements" data-toggle="tab">Statement of Cash Flows</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+
+            <!-- Summary Tab -->
+            <div class="tab-pane fade in active" id="summary">
+                <div class="col-lg-12 panel panel-body">
+                    {% include 'finance/summary.html' %}
+                </div>
+            </div>
+
+            <!-- Inflows Tab -->
+            <div class="tab-pane fade" id="inflows">
+                <div class="col-lg-12 panel panel-body">
+                    {% include 'finance/inflows.html' %}
+                </div>
+            </div>
+
+            <!-- Outflows Tab -->
+            <div class="tab-pane fade" id="outflows">
+                <div class="col-lg-12 panel panel-body">
+                    {% include 'finance/outflows.html' %}
+                </div>
+            </div>
+
+            <!-- Chart Tab -->
+            <div class="tab-pane fade" id="chart">
+                <div class="col-lg-12 panel panel-body">
+                    {% include 'finance/chart.html' %}                    
+                </div>
+                <!-- /.panel -->
+            </div>
+
+            <!-- Statements Tab -->
+            <div class="tab-pane fade" id="statements">
+                <div class="col-lg-12 panel panel-body">
+                    {% include 'finance/statements.html' %}
+                </div>
+            </div>
+
+        </div>
+        <!-- /.tab -->
+
+    </div>
+    <!-- /.row col-lg-12 -->
+
+{% endblock %}
+
+</div>
+<!-- /.container-fluid -->
+
+{% block scripts %}
+
+<!-- DataTables JavaScript -->
+<script src="{% static "finance/bootstrap/vendor/datatables/js/jquery.dataTables.min.js" %}"></script>
+<script src="{% static "finance/bootstrap/vendor/datatables-plugins/dataTables.bootstrap.min.js" %}"></script>
+<script src="{% static "finance/bootstrap/vendor/datatables-responsive/dataTables.responsive.js" %}"></script>
+
+<script>
+$(document).ready(function() {
+    $('#dataTables-in').DataTable({
+        responsive: true
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $('#dataTables-out').DataTable({
+        responsive: true
+    });
+});
+</script>
+
+<script>
+$(document).ready(function() {
+    $('#dataTables-chart').DataTable({
+        responsive: true
+    });
+});
+</script>
+
+{% endblock %}

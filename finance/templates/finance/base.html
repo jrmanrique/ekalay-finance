@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% block title %}eKalay{% endblock %}</title>
+
+    {% load staticfiles %}
+
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "finance/bootstrap/vendor/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{% static "finance/bootstrap/vendor/metisMenu/metisMenu.min.css" %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static "finance/bootstrap/dist/css/sb-admin-2.css" %}" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="{% static "finance/bootstrap/vendor/morrisjs/morris.css" %}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{% static "finance/bootstrap/vendor/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
+
+    <!-- Custom Files -->
+    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+    <link href="{% static "finance/style.css" %}" rel="stylesheet" type="text/css">
+    {% block links %}
+    {% endblock %}
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
+
+</head>
+<body>
+
+        <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'index' %}">eKalay</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <!-- Navbar Right -->
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user" aria-hidden="true"></i> User <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"><i class="fa fa-user" aria-hidden="true"></i> Profile </a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+            </ul>
+            <!-- /.navbar-right -->
+
+            <!-- Sidebar -->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Permits<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">View Permits</a>
+                                </li>
+                                <li>
+                                    <a href="#">Apply Permits</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-money" aria-hidden="true"></i> Billing</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-calendar" aria-hidden="true"></i> Calendar of Activities</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-book" aria-hidden="true"></i> Academic Database</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'index' %}"><i class="fa fa-money" aria-hidden="true"></i> Finance Accounting</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-users" aria-hidden="true"></i> Council Polls</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Finance Accounting Module</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+
+           {% block body %}
+           {% endblock %}
+        
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="{% static "finance/bootstrap/vendor/jquery/jquery.js"%}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static "finance/bootstrap/vendor/bootstrap/js/bootstrap.min.js"%}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static "finance/bootstrap/vendor/metisMenu/metisMenu.min.js"%}"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="{% static "finance/bootstrap/vendor/raphael/raphael.min.js"%}"></script>
+    <script src="{% static "finance/bootstrap/vendor/morrisjs/morris.min.js"%}"></script>
+    <script src="{% static "finance/bootstrap/data/morris-data.js"%}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static "finance/bootstrap/dist/js/sb-admin-2.js"%}"></script>
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+</html>

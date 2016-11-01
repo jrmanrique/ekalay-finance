@@ -1,0 +1,21 @@
+<form role="form" class="form-horizontal" action="" method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+            <div class="col-lg-offset-2">
+                <span class="text-danger small">{{ field.errors }}</span>
+            </div>
+            <div class="row form-group">
+                <label class="control-label col-lg-2">{{ field.label_tag }}</label>
+                <div class="col-lg-6">{{ field }}</div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="form-group">
+        <div class="col-lg-offset-2 row">
+            <button type="submit" class="btn btn-success">Save</button>
+            <button type="reset" class="btn btn-default">Reset</button>
+            <a class="btn btn-default" href="{% url 'index' %}" role="button">Back</a>
+        </div>
+    </div>
+</form>
