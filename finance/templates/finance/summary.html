@@ -16,16 +16,16 @@
     {% endwith %}
     <!-- End Definition -->
 </div>
-{% if user.is_authenticated %}
+{% comment %}{% if user.is_authenticated %}{% endcomment %}
 <hr/>
 <div class="row text-left pull-right">
     <a class="btn btn-primary" href="{% url 'inflow-add' %}" role="button">
         <span class="glyphicon glyphicon-save" aria-hidden="true"></span> &nbsp; Add Inflow</a>
     <a class="btn btn-primary" href="{% url 'outflow-add' %}" role="button">
         <span class="glyphicon glyphicon-open" aria-hidden="true"></span> &nbsp; Add Outflow</a>
-    {% if user.is_superuser %}
+    {% comment %}{% if user.is_superuser %}{% endcomment %}
         <a class="btn btn-warning" href="{% url 'account-add' %}" role="button">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> &nbsp; Add Account</a>
-    {% endif %}
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> &nbsp; Add Account</a>
+    {% comment %}{% endif %}{% endcomment %}
 </div>
-{% endif %}
+{% comment %}{% endif %}{% endcomment %}

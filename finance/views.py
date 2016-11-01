@@ -27,7 +27,7 @@ def index(request):
         'list_accounts' : listAccounts(),
         'list_types' : listTypes(),
         'balance' : Decimal(balance).quantize(Decimal('.01')),
-        'test' : testLols(num),
+#         'test' : testLols(num),
     }
     return render(request, 'finance/index.html', context)
 
