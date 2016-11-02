@@ -23,7 +23,7 @@ def index(request):
         'title' : getField(num),
         'total_title' : sumTitle(getField(num)),
         'type' : getType(num),
-        'total_type' : sumType(getType(num)),
+        'total_type' : sumTypeNet(getType(num)),
         'list_accounts' : listAccounts(),
         'list_types' : listTypes(),
         'balance' : Decimal(balance).quantize(Decimal('.01')),

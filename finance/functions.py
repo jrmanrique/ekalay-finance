@@ -37,12 +37,24 @@ def sumFlow(model):
     return sum
 
 
-def sumType(account_type):
+def sumTypeInflow(account_type):
     " Get sum of amount of flow_type in model "
     inflow = CashInflow.objects.filter(flow_type=account_type).aggregate(Sum('amount'))
+    inflow_sum = convertNone(inflow)
+    return inflow_sum
+
+
+def sumTypeOutflow(account_type):
+    " Get sum of amount of flow_type in model "
     outflow = CashOutflow.objects.filter(flow_type=account_type).aggregate(Sum('amount'))
-    sum = convertNone(inflow)-convertNone(outflow)
-    return sum
+    outflow_sum = convertNone(outflow)
+    return outflow_sum
+
+
+def sumTypeNet(account_type):
+    " Get sum of amount of flow_type in model "
+    net_sum = sumTypeInflow(account_type)-sumTypeOutflow(account_type)
+    return net_sum
 
 
 def sumTitle(title):
@@ -53,11 +65,23 @@ def sumTitle(title):
     return sum
 
 
-def sumRefnum(num):
+def sumRefnumInflow(num):
     " Get sum of amount of ref_num in model "
     inflow = CashInflow.objects.filter(ref_num=num).aggregate(Sum('amount'))
+    inflow_sum = convertNone(inflow)
+    return inflow_sum
+
+
+def sumRefnumOutflow(num):
+    " Get sum of amount of ref_num in model "
     outflow = CashOutflow.objects.filter(ref_num=num).aggregate(Sum('amount'))
-    sum = convertNone(inflow)-convertNone(outflow)
+    outflow_sum = convertNone(outflow)
+    return outflow_sum
+
+
+def sumRefnumNet(num):
+    " Get sum of amount of ref_num in model "
+    sum = sumRefnumInflow(num)-sumRefnumOutflow(num)
     return sum
 
 
@@ -69,7 +93,9 @@ def listAccounts():
         account_details['num'] = account.ref_num
         account_details['title'] = account.account_title
         account_details['type'] = str(account.account_type)
-        account_details['value'] = sumRefnum(account.ref_num)
+        account_details['net'] = sumRefnumNet(account.ref_num)
+        account_details['inflow'] = sumRefnumInflow(account.ref_num)
+        account_details['outflow'] = sumRefnumOutflow(account.ref_num)
         account_list.append(account_details)
     return account_list
 
@@ -80,7 +106,9 @@ def listTypes():
     for account_type in AccountTypes.objects.all():
         type_details = {}
         type_details['type'] = account_type.account_type
-        type_details['value'] = sumType(account_type)
+        type_details['net'] = sumTypeNet(account_type)
+        type_details['inflow'] = sumTypeInflow(account_type)
+        type_details['outflow'] = sumTypeOutflow(account_type)
         type_list.append(type_details)
     return type_list
 

@@ -40,22 +40,22 @@
 <div class="row col-sm-12"><b><p>Cash Inflows</p></b></div>
 
 {% for account_type in list_types %}
-    {% if account_type.value > 0 %}
-        <div class="col-sm-12" style="text-indent: 0.25in"><b>{{ account_type.type }}</b></div>
-        {% for account in list_accounts %}
-            {% if account.value > 0 and account.type == account_type.type %}
-                <div class="row col-sm-12">
-                    <div class="col-sm-6" style="text-indent: 0.5in"><b>{{ account.num }}&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ account.title }}</div>
-                    <div class="col-sm-1 text-right">PHP</div>
-                    <div class="col-sm-2 text-right">{{ account.value|abs|intcomma}} </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-        <div class="row"><b>
-            <div class="col-sm-9"><p style="text-indent: 1in">Total {{ account_type.type }}</p></div>
-            <div class="col-sm-1 text-right">PHP</div>
-            <div class="col-sm-2 text-right">{{ account_type.value|abs|intcomma }}</div>
-        </b></div>
+    {% if account_type.inflow > 0 %}
+    <div class="col-sm-12" style="text-indent: 0.25in"><b>{{ account_type.type }}</b></div>
+    {% for account in list_accounts %}
+        {% if account.inflow > 0 and account.type == account_type.type %}
+            <div class="row col-sm-12">
+                <div class="col-sm-6" style="text-indent: 0.5in"><b>{{ account.num }}&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ account.title }}</div>
+                <div class="col-sm-1 text-right">PHP</div>
+                <div class="col-sm-2 text-right">{{ account.inflow|abs|intcomma}} </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <div class="row"><b>
+        <div class="col-sm-9"><p style="text-indent: 1in">Total {{ account_type.type }}</p></div>
+        <div class="col-sm-1 text-right">PHP</div>
+        <div class="col-sm-2 text-right">{{ account_type.inflow|abs|intcomma }}</div>
+    </b></div>
     {% endif %}
 {% endfor %}
 
@@ -68,22 +68,22 @@
 <div class="row col-sm-12"><b><p>Cash Outflows</p></b></div>
 
 {% for account_type in list_types %}
-    {% if account_type.value < 0 %}
-        <div class="col-sm-12" style="text-indent: 0.25in"><b>{{ account_type.type }}</b></div>
-        {% for account in list_accounts %}
-            {% if account.value < 0 and account.type == account_type.type %}
-                <div class="row col-sm-12">
-                    <div class="col-sm-6" style="text-indent: 0.5in"><b>{{ account.num }}&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ account.title }}</div>
-                    <div class="col-sm-1 text-right">PHP</div>
-                    <div class="col-sm-2 text-right">{{ account.value|abs|intcomma}} </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-        <div class="row"><b>
-            <div class="col-sm-9"><p style="text-indent: 1in">Total {{ account_type.type }}</p></div>
-            <div class="col-sm-1 text-right">PHP</div>
-            <div class="col-sm-2 text-right">{{ account_type.value|abs|intcomma }}</div>
-        </b></div>
+    {% if account_type.outflow > 0 %}
+    <div class="col-sm-12" style="text-indent: 0.25in"><b>{{ account_type.type }}</b></div>
+    {% for account in list_accounts %}
+        {% if account.outflow > 0 and account.type == account_type.type %}
+            <div class="row col-sm-12">
+                <div class="col-sm-6" style="text-indent: 0.5in"><b>{{ account.num }}&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ account.title }}</div>
+                <div class="col-sm-1 text-right">PHP</div>
+                <div class="col-sm-2 text-right">{{ account.outflow|abs|intcomma}} </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <div class="row"><b>
+        <div class="col-sm-9"><p style="text-indent: 1in">Total {{ account_type.type }}</p></div>
+        <div class="col-sm-1 text-right">PHP</div>
+        <div class="col-sm-2 text-right">{{ account_type.outflow|abs|intcomma }}</div>
+    </b></div>
     {% endif %}
 {% endfor %}
 
