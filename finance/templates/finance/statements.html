@@ -34,7 +34,7 @@
         <b> Kalayaan Residence Hall Association </b> <br/>
         Kalayaan Residence Hall House Council <br/>
         Statement of Cash Flows <br/>
-        For the interim period ended 31 October 2016 <br/>
+        For the interim period ended {{ end_of_month }} <br/>
     </p>
 </div>
 
@@ -102,12 +102,12 @@
 </b></div>
 
 <div class="row">
-    <div class="col-sm-10">Beginning Balance, 1 October 2016</div>
+    <div class="col-sm-10">Beginning Balance, {{ beg_of_month }}</div>
     <div class="col-sm-2 text-right">{{ balance|abs|intcomma }}</div>
 </div>
 
 <div class="row"><b>
-    <div class="col-sm-9"><b>Ending Cash, 31 October 2016</b></div>
+    <div class="col-sm-9"><b>Ending Cash, {{ end_of_month }}</b></div>
     <div class="col-sm-1 text-right"> PHP </div>
     <div class="col-sm-2 text-right">{{ balance|addition:net_flow|intcomma }}</div>
 </b></div>
