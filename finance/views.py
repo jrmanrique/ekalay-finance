@@ -11,8 +11,6 @@ from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
 
 
 def index(request):
-    num = 33
-    balance = 139648.70
     context = {
         'all_inflows' : CashInflow.objects.all(),
         'all_outflows' : CashOutflow.objects.all(),
@@ -31,7 +29,49 @@ def index(request):
         'end_of_month' : str(monthrange(now.year, now.month)[1]) + ' ' + month_name[now.month] + ' ' + str(now.year),
         'test' : CashOutflow.objects.filter(date__month=now.month).aggregate(Sum('amount'))
     }
-    return render(request, 'finance/index.html', context)
+    return render(request, 'finance/view.html', context)
+
+
+def view(request):
+    context = {
+        'all_inflows' : CashInflow.objects.all(),
+        'all_outflows' : CashOutflow.objects.all(),
+        'all_accounts' : ChartOfAccounts.objects.all(),
+        'total_inflow' : sumFlow(CashInflow, monthed),
+        'total_outflow' : sumFlow(CashOutflow, monthed),
+        'title' : getField(num),
+        'total_title' : sumRefnumNet(num, monthed),
+        'type' : getType(num),
+        'total_type' : sumTypeNet(getType(num), monthed),
+        'test' : str(sumRefnumInflow(num, monthed)) + ' - ' + str(sumRefnumOutflow(num, monthed)),
+    }
+    return render(request, 'finance/view.html', context)
+
+
+def statement(request):
+    context = {
+        'all_inflows' : CashInflow.objects.all(),
+        'all_outflows' : CashOutflow.objects.all(),
+        'all_accounts' : ChartOfAccounts.objects.all(),
+        'all_account_types' : AccountTypes.objects.all(),
+        'total_inflow' : sumFlow(CashInflow, monthed),
+        'total_outflow' : sumFlow(CashOutflow, monthed),
+        'list_accounts' : listAccounts(),
+        'list_types' : listTypes(),
+        'balance' : Decimal(balance).quantize(Decimal('.01')),
+        'beg_of_month' : str(1) + ' ' + month_name[now.month] + ' ' + str(now.year),
+        'end_of_month' : str(monthrange(now.year, now.month)[1]) + ' ' + month_name[now.month] + ' ' + str(now.year),
+    }
+    return render(request, 'finance/statement.html', context)
+
+
+def finAdmin(request):
+    context = {
+        'all_accounts' : ChartOfAccounts.objects.all(),
+        'all_account_types' : AccountTypes.objects.all(),
+    }
+    messages.warning(request, "Make sure you know what you are doing.")
+    return render(request, 'finance/fin-admin.html', context)
 
 
 def inflows(request):

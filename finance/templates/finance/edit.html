@@ -1,4 +1,5 @@
 {% extends 'finance/base.html' %}
+
 {% load staticfiles %}
 
 {% block title %}Finance | eKalay{% endblock %}
@@ -18,10 +19,6 @@
 
     <div class="row col-lg-12 panel-body">
 
-        {% if messages %}
-            {% include 'finance/message-template.html' %}
-        {% endif %}
-
         <!-- Nav tabs -->
         <ul class="nav nav-tabs">
             <li class="active"><a href="#summary" data-toggle="tab">Summary</a>
@@ -31,8 +28,6 @@
             <li><a href="#outflows" data-toggle="tab">Cash Outflows</a>
             </li>
             <li><a href="#chart" data-toggle="tab">Chart of Accounts</a>
-            </li>
-            <li><a href="#statements" data-toggle="tab">Statement of Cash Flows</a>
             </li>
         </ul>
         
@@ -45,7 +40,7 @@
                     {% include 'finance/summary.html' %}
                 </div>
             </div>
-
+            
             <!-- Inflows Tab -->
             <div class="tab-pane fade" id="inflows">
                 <div class="col-lg-12 panel panel-body">
@@ -66,13 +61,6 @@
                     {% include 'finance/chart.html' %}                    
                 </div>
                 <!-- /.panel -->
-            </div>
-
-            <!-- Statements Tab -->
-            <div class="tab-pane fade" id="statements">
-                <div class="col-lg-12 panel panel-body">
-                    {% include 'finance/statements.html' %}
-                </div>
             </div>
 
         </div>

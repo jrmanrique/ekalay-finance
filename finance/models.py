@@ -45,7 +45,7 @@ class CashInflow(models.Model):
 
     class Meta:
         verbose_name = 'Cash Inflow'
-        ordering = ('date',)
+        ordering = ('-date',)
 
     def __str__(self):
         return str(self.date) + ' ' + str(self.payor) + ' (PHP ' + str(self.amount) +')'
@@ -73,7 +73,7 @@ class CashOutflow(models.Model):
 
     class Meta:
         verbose_name = 'Cash Outflow'
-        ordering = ('date',)
+        ordering = ('-date',)
 
     def __str__(self):
         return str(self.date) + ' ' + str(self.purpose) + ' (PHP ' + str(self.amount) +')'

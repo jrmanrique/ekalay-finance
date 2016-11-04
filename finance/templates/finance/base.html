@@ -85,42 +85,56 @@
                         <br /> -->
                         <ul class="nav" id="side-menu">
                             <li>
-                                <a href="#"><i class="fa fa-home" aria-hidden="true"></i> Dashboard</a>
+                                <a href="javascript:void(0)"><i class="fa fa-home" aria-hidden="true"></i> Dashboard</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Permits<span class="fa arrow"></span></a>
+                                <a href="javascript:void(0)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Permits<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="#">View Permits</a>
+                                        <a href="javascript:void(0)">View Permits</a>
                                     </li>
                                     <li>
-                                        <a href="#">Apply Permits</a>
+                                        <a href="javascript:void(0)">Apply Permits</a>
                                     </li>
                                 </ul>
                                 <!-- /.nav-second-level -->
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-money" aria-hidden="true"></i> Billing</a>
+                                <a href="javascript:void(0)"><i class="fa fa-money" aria-hidden="true"></i> Billing</a>
                             </li>
-                        </ul>
-<!--                     </div>
+<!--                         </ul>
+                    </div>
                     <div class="menu_section">
                         <br />
                         <b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Council Apps</b>
                         <br />
-                        <br /> -->
-                        <ul class="nav" id="side-menu">
+                        <br />
+                        <ul class="nav" id="side-menu"> -->
                             <li>
-                                <a href="#"><i class="fa fa-group" aria-hidden="true"></i> Grievance Form</a>
+                                <a href="javascript:void(0)"><i class="fa fa-group" aria-hidden="true"></i> Grievance Form</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-calendar" aria-hidden="true"></i> Calendar of Activities</a>
+                                <a href="javascript:void(0)"><i class="fa fa-calendar" aria-hidden="true"></i> Calendar of Activities</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-book" aria-hidden="true"></i> Academic Database</a>
+                                <a href="javascript:void(0)"><i class="fa fa-book" aria-hidden="true"></i> Academic Database</a>
                             </li>
                             <li>
-                                <a href="{% url 'index' %}"><i class="fa fa-money" aria-hidden="true"></i> Finance Accounting</a>
+                                <a href="javascript:void(0)"><i class="fa fa-money" aria-hidden="true"></i> Finance Accounting<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="{% url 'view' %}">View Cash Flows</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">Add Cash Flows</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'statement' %}">Statement of Cash Flows</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'finadmin' %}">Administrative Access</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                 </div>
@@ -133,14 +147,18 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Finance Accounting Module</h1>
+                    <h2 class="page-header">Finance Accounting Module</h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
 
-           {% block body %}
-           {% endblock %}
+            {% if messages %}
+                {% include 'finance/message-template.html' %}
+            {% endif %}
+            
+            {% block body %}
+            {% endblock %}
         
         </div>
         <!-- /#page-wrapper -->

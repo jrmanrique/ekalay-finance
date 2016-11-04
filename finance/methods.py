@@ -9,7 +9,10 @@ from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
 
 # Global Variables
 
-now = datetime.now()
+now = datetime.now() # Do not change.
+
+num = 32
+balance = 139648.70
 monthed = False
 
 # Methods
@@ -71,9 +74,9 @@ def sumTypeOutflow(account_type, monthed=True):
     return convertNone(outflow)
 
 
-def sumTypeNet(account_type):
+def sumTypeNet(account_type, monthed):
     " Get sum of amount of flow_type in model "
-    net_sum = sumTypeInflow(account_type)-sumTypeOutflow(account_type)
+    net_sum = sumTypeInflow(account_type, monthed)-sumTypeOutflow(account_type, monthed)
     return net_sum
 
 
@@ -97,9 +100,9 @@ def sumRefnumOutflow(num, monthed=True):
     return convertNone(outflow)
 
 
-def sumRefnumNet(num):
+def sumRefnumNet(num, monthed):
     " Get sum of amount of ref_num in model "
-    sum = sumRefnumInflow(num)-sumRefnumOutflow(num)
+    sum = sumRefnumInflow(num, monthed)-sumRefnumOutflow(num, monthed)
     return sum
 
 
@@ -111,7 +114,7 @@ def listAccounts():
         account_details['num'] = account.ref_num
         account_details['title'] = account.account_title
         account_details['type'] = str(account.account_type)
-        account_details['net'] = sumRefnumNet(account.ref_num)
+        account_details['net'] = sumRefnumNet(account.ref_num, monthed)
         account_details['inflow'] = sumRefnumInflow(account.ref_num, monthed)
         account_details['outflow'] = sumRefnumOutflow(account.ref_num, monthed)
         account_list.append(account_details)
@@ -124,7 +127,7 @@ def listTypes():
     for account_type in AccountTypes.objects.all():
         type_details = {}
         type_details['type'] = account_type.account_type
-        type_details['net'] = sumTypeNet(account_type)
+        type_details['net'] = sumTypeNet(account_type, monthed)
         type_details['inflow'] = sumTypeInflow(account_type, monthed)
         type_details['outflow'] = sumTypeOutflow(account_type, monthed)
         type_list.append(type_details)
