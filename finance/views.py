@@ -1,7 +1,7 @@
 from calendar import monthrange, month_name
 
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
@@ -66,14 +66,86 @@ def statement(request):
 
 
 def finAdmin(request):
+    messages.warning(request, "Make sure you know what you are doing.")
+    if request.method == "POST":
+        form = ChartOfAccountsForm(request.POST)
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.save()
+            messages.success(request, "This account has been added.")
+    else:
+        form = ChartOfAccountsForm()
     context = {
+        'form' : form,
         'all_accounts' : ChartOfAccounts.objects.all(),
         'all_account_types' : AccountTypes.objects.all(),
+        'back' : 'finadmin',
     }
-    messages.warning(request, "Make sure you know what you are doing.")
     return render(request, 'finance/fin-admin.html', context)
 
 
+class FinAdminEdit(UpdateView):
+    edit_mode = True
+    model = ChartOfAccounts
+    form_class = ChartOfAccountsForm
+    template_name = 'finance/fin-admin.html'
+
+    def get(self, request, **kwargs):
+        self.object = self.model.objects.get(pk=self.kwargs['pk'])
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        context = self.get_context_data(object=self.object, form=form)
+        return self.render_to_response(context)
+
+    def get_object(self, queryset=None):
+        account = self.model.objects.get(pk=self.kwargs['pk'])
+        return account
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, "The account has been updated.")
+        return redirect('finadmin')
+        # return render(self.request, 'finance/generic-form.html', self.get_context_data())
+
+    def get_context_data(self, **kwargs):
+        context = super(FinAdminEdit, self).get_context_data(**kwargs)
+        form = self.form_class(instance=self.get_object(self))
+        context = {
+            'form' : form,
+            'edit_mode' : self.edit_mode,
+            'back' : 'finadmin',
+        }
+        return context
+
+    
+class FinAdminDelete(DeleteView):
+    delete_mode = True
+    model = ChartOfAccounts
+    template_name = 'finance/fin-admin.html'
+    success_url = reverse_lazy('finadmin')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "The account has been deleted successfully.")
+        return super(FinAdminDelete,self).delete(self, request, *args, **kwargs)
+
+    def get_object(self, queryset=None):
+        account = self.model.objects.get(pk=self.kwargs['pk'])
+        return account
+        
+    def get_context_data(self, **kwargs):
+        context = super(FinAdminDelete, self).get_context_data(**kwargs)
+        texta = 'Account'
+        textb = texta.lower()
+        context = {
+            'texta' : texta,
+            'textb' : textb,
+            'textc' : self.get_object(self),
+            'delete_mode' : self.delete_mode,
+            'back' : 'finadmin',
+        }
+        return context
+    
+    
 def inflows(request):
     all_inflows = CashInflow.objects.all()
     context = {

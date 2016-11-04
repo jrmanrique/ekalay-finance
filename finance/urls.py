@@ -7,9 +7,8 @@ urlpatterns = [
 #     url(r'^$', views.index, name='index'),
     url(r'^$', views.view, name='index'),
     url(r'^view/$', views.view, name='view'),
-#     url(r'^edit/$', views.edit, name='edit'),
     url(r'^statement/$', views.statement, name='statement'),
-    url(r'^finadmin/$', views.finAdmin, name='finadmin'),
+#     url(r'^edit/$', views.edit, name='edit'),
 
 #     /finance/inflows
 #     url(r'^inflows/$', views.inflows, name='inflows'),
@@ -22,9 +21,9 @@ urlpatterns = [
     url(r'^outflows/add/$', views.OutflowCreate.as_view(), name='outflow-add'),
     url(r'^outflows/(?P<pk>\d+)/edit/$', views.OutflowEdit.as_view(), name='outflow-edit'),
     url(r'^outflows/(?P<pk>\d+)/delete/$', views.OutflowDelete.as_view(), name='outflow-delete'),
-
-#     /finance/accounts
-    url(r'^accounts/add/$', views.AccountCreate.as_view(), name='account-add'),
-    url(r'^accounts/(?P<pk>\d+)/edit/$', views.AccountEdit.as_view(), name='account-edit'),
-    url(r'^accounts/(?P<pk>\d+)/delete/$', views.AccountDelete.as_view(), name='account-delete'),
+ 
+#     /finance/admin
+    url(r'^admin/$', views.finAdmin, name='finadmin'),
+    url(r'^admin/edit/(?P<pk>\d+)$', views.FinAdminEdit.as_view(), name='finadmin-edit'),
+    url(r'^admin/delete/(?P<pk>\d+)$', views.FinAdminDelete.as_view(), name='finadmin-delete'),
 ]
