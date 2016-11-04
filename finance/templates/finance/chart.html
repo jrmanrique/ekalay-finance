@@ -7,9 +7,13 @@
             <th class="col-md-2 text-center">Reference</th>
             <th>Account Title</th>
             <th>Account Type</th>
+            {% comment %}
             {% if user.is_superuser %}
+            {% endcomment %}
                 <th class="col-md-2 text-center">Actions</th>
+            {% comment %}
             {% endif %}
+            {% endcomment %}
         </tr>
     </thead>
     <tbody>
@@ -18,12 +22,16 @@
             <td class="col-md-2"><p class="text-center">{{ account.ref_num }}</p></td>
             <td>{{ account.account_title }}</td>
             <td>{{ account.account_type }}</td>
+            {% comment %}
             {% if user.is_superuser %}
+            {% endcomment %}
                 <td class="col-md-2 text-center">
                     <a class="" href="{% url 'account-edit' pk=account.pk %}"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp;
                     <a class="" href="{% url 'account-delete' pk=account.pk %}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </td>
+            {% comment %}
             {% endif %}
+            {% endcomment %}
         </tr>
     {% endfor %}
     </tbody>

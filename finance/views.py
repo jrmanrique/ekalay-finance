@@ -40,15 +40,15 @@ def inflows(request):
     return render(request, 'finance/inflows.html', context)
 
 
-''' def inflowCreate(request):
-    if request.method == "POST":
-        form = CashInflowForm(request.POST)
-        if form.is_valid():
-            inflow = form.save(commit=False)
-            inflow.save()
-    else:
-        form = CashInflowForm()
-    return render(request, 'finance/inflow-form.html', {'form': form}) '''
+# def inflowCreate(request):
+#     if request.method == "POST":
+#         form = CashInflowForm(request.POST)
+#         if form.is_valid():
+#             inflow = form.save(commit=False)
+#             inflow.save()
+#     else:
+#         form = CashInflowForm()
+#     return render(request, 'finance/inflow-form.html', {'form': form})
 
 
 class InflowCreate(CreateView):
@@ -71,18 +71,18 @@ class InflowCreate(CreateView):
         return context
 
 
-''' def inflowEdit(request, pk):
-    inflow = get_object_or_404(CashInflow, pk=pk)
-    if request.method == "POST":
-        form = CashInflowForm(request.POST, instance=inflow)
-        if form.is_valid():
-            inflow = form.save(commit=False)
-            inflow.save()
-            # return redirect('inflowEdit', pk=inflow.pk)
-            return redirect('index')
-    else:
-        form = CashInflowForm(instance=inflow)
-    return render(request, 'finance/inflow-form.html', {'form': form}) '''
+# def inflowEdit(request, pk):
+#     inflow = get_object_or_404(CashInflow, pk=pk)
+#     if request.method == "POST":
+#         form = CashInflowForm(request.POST, instance=inflow)
+#         if form.is_valid():
+#             inflow = form.save(commit=False)
+#             inflow.save()
+#             # return redirect('inflowEdit', pk=inflow.pk)
+#             return redirect('index')
+#     else:
+#         form = CashInflowForm(instance=inflow)
+#     return render(request, 'finance/inflow-form.html', {'form': form})
 
 
 class InflowEdit(UpdateView):
@@ -118,11 +118,11 @@ class InflowEdit(UpdateView):
         return context
 
 
-''' def inflowDelete(request, pk):
-    inflow = get_object_or_404(CashInflow, pk=pk)
-    inflow.delete()
-    # outflows = outflow.objects.filter(user=request.user)
-    return redirect('index') '''
+# def inflowDelete(request, pk):
+#     inflow = get_object_or_404(CashInflow, pk=pk)
+#     inflow.delete()
+#     # outflows = outflow.objects.filter(user=request.user)
+#     return redirect('index')
 
 
 class InflowDelete(DeleteView):

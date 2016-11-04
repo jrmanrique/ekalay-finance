@@ -31,6 +31,7 @@
     <!-- Custom Files -->
     <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
     <link href="{% static "finance/style.css" %}" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     {% block links %}
     {% endblock %}
 
@@ -77,38 +78,51 @@
             <!-- Sidebar -->
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li>
-                            <a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Permits<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#">View Permits</a>
-                                </li>
-                                <li>
-                                    <a href="#">Apply Permits</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-money" aria-hidden="true"></i> Billing</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-calendar" aria-hidden="true"></i> Calendar of Activities</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-book" aria-hidden="true"></i> Academic Database</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'index' %}"><i class="fa fa-money" aria-hidden="true"></i> Finance Accounting</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-users" aria-hidden="true"></i> Council Polls</a>
-                        </li>
-                    </ul>
+                    <div class="menu_section">
+<!--                         <br />
+                        <b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; General</b>
+                        <br />
+                        <br /> -->
+                        <ul class="nav" id="side-menu">
+                            <li>
+                                <a href="#"><i class="fa fa-home" aria-hidden="true"></i> Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Permits<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">View Permits</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Apply Permits</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-money" aria-hidden="true"></i> Billing</a>
+                            </li>
+                        </ul>
+<!--                     </div>
+                    <div class="menu_section">
+                        <br />
+                        <b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Council Apps</b>
+                        <br />
+                        <br /> -->
+                        <ul class="nav" id="side-menu">
+                            <li>
+                                <a href="#"><i class="fa fa-group" aria-hidden="true"></i> Grievance Form</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-calendar" aria-hidden="true"></i> Calendar of Activities</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-book" aria-hidden="true"></i> Academic Database</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'index' %}"><i class="fa fa-money" aria-hidden="true"></i> Finance Accounting</a>
+                            </li>
+                        </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
             </div>

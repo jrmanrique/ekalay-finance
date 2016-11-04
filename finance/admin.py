@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
+from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 
 # Register your models here.
 
