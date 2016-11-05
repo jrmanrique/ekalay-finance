@@ -271,14 +271,6 @@ class InflowDelete(DeleteView):
         return context
 
 
-def outflows(request):
-    all_outflows = CashOutflow.objects.all()
-    context = {
-        'all_outflows' : all_outflows,
-    }
-    return render(request, 'finance/outflows.html', context)
-
-
 class OutflowCreate(CreateView):
     form_class = CashOutflowForm
     template_name = 'finance/generic-form.html'
