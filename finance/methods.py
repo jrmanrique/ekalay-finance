@@ -2,13 +2,15 @@ from datetime import *
 from decimal import *
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Min, Sum
+from django.db.models import Sum
 
 from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
 
+
 # Global Variables
 
-now = datetime.now() # Do not change.
+
+now = datetime.now() # Do not change. Currently unused.
 monthed = False
 test_mode = False
 
@@ -17,11 +19,13 @@ num = 32
 balance = 124795.70
 in_bank = 99510.20
 
+
 # Methods
+
 
 def toggleMonthedMethod():
     " Toggle state of boolean monthed "
-    global monthed 
+    global monthed
     monthed = not monthed
     return monthed
 
@@ -34,7 +38,7 @@ def convertNone(value):
         return Decimal(value.get('amount__sum')).quantize(Decimal('.01'))
 
 
-def getField(num,field='account_title'):
+def getField(num, field='account_title'):
     " Get field from ref_num in models.ChartOfAccounts "
     try:
         field = ChartOfAccounts.objects.values().get(ref_num=num).get(field)

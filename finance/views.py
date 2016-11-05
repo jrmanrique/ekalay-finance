@@ -1,7 +1,7 @@
-from calendar import monthrange, month_name
+from calendar import monthrange, month_name # Currently unused.
 
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
@@ -12,33 +12,33 @@ from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
 
 def view(request):
     context = {
-        'all_inflows' : CashInflow.objects.all(),
-        'all_outflows' : CashOutflow.objects.all(),
-        'all_accounts' : ChartOfAccounts.objects.all(),
-        'total_inflow' : sumFlow(CashInflow, monthed),
-        'total_outflow' : sumFlow(CashOutflow, monthed),
-        'title' : getField(num),
-        'total_title' : sumRefnumNet(num, monthed),
-        'type' : getType(num),
-        'total_type' : sumTypeNet(getType(num), monthed),
-        'balance' : Decimal(balance).quantize(Decimal('.01')),
-        'test_mode' : test_mode,
+        'all_inflows': CashInflow.objects.all(),
+        'all_outflows': CashOutflow.objects.all(),
+        'all_accounts': ChartOfAccounts.objects.all(),
+        'total_inflow': sumFlow(CashInflow, monthed),
+        'total_outflow': sumFlow(CashOutflow, monthed),
+        'title': getField(num),
+        'total_title': sumRefnumNet(num, monthed),
+        'type': getType(num),
+        'total_type': sumTypeNet(getType(num), monthed),
+        'balance': Decimal(balance).quantize(Decimal('.01')),
+        'test_mode': test_mode,
     }
     return render(request, 'finance/view.html', context)
 
 
 def statement(request):
     context = {
-        'all_inflows' : CashInflow.objects.all(),
-        'all_outflows' : CashOutflow.objects.all(),
-        'all_accounts' : ChartOfAccounts.objects.all(),
-        'all_account_types' : AccountTypes.objects.all(),
-        'total_inflow' : sumFlow(CashInflow, monthed),
-        'total_outflow' : sumFlow(CashOutflow, monthed),
-        'list_accounts' : listAccounts(),
-        'list_types' : listTypes(),
-        'balance' : Decimal(balance).quantize(Decimal('.01')),
-        'in_bank' : Decimal(in_bank).quantize(Decimal('.01')),
+        'all_inflows': CashInflow.objects.all(),
+        'all_outflows': CashOutflow.objects.all(),
+        'all_accounts': ChartOfAccounts.objects.all(),
+        'all_account_types': AccountTypes.objects.all(),
+        'total_inflow': sumFlow(CashInflow, monthed),
+        'total_outflow': sumFlow(CashOutflow, monthed),
+        'list_accounts': listAccounts(),
+        'list_types': listTypes(),
+        'balance': Decimal(balance).quantize(Decimal('.01')),
+        'in_bank': Decimal(in_bank).quantize(Decimal('.01')),
     }
     return render(request, 'finance/statement.html', context)
 
@@ -59,10 +59,10 @@ def finAdmin(request):
     else:
         form = ChartOfAccountsForm()
     context = {
-        'form' : form,
-        'all_accounts' : ChartOfAccounts.objects.all(),
-        'all_account_types' : AccountTypes.objects.all(),
-        'back' : 'finadmin',
+        'form': form,
+        'all_accounts': ChartOfAccounts.objects.all(),
+        'all_account_types': AccountTypes.objects.all(),
+        'back': 'finadmin',
     }
     return render(request, 'finance/fin-admin.html', context)
 
@@ -74,7 +74,7 @@ class FinAdmin(CreateView):
     def get(self, request, *args, **kwargs):
         messages.warning(self.request, "Make sure you know what you are doing.")
         return super(FinAdmin, self).get(request, *args, **kwargs)
-        
+
     def form_valid(self, form):
         form.save()
         messages.success(self.request, "This account has been created.")
@@ -84,10 +84,10 @@ class FinAdmin(CreateView):
         context = super(FinAdmin, self).get_context_data(**kwargs)
         form = self.form_class()
         context = {
-            'form' : form,
-            'all_accounts' : ChartOfAccounts.objects.all(),
-            'all_account_types' : AccountTypes.objects.all(),
-            'back' : 'finadmin',
+            'form': form,
+            'all_accounts': ChartOfAccounts.objects.all(),
+            'all_account_types': AccountTypes.objects.all(),
+            'back': 'finadmin',
         }
         return context
 
@@ -119,13 +119,13 @@ class FinAdminEdit(UpdateView):
         context = super(FinAdminEdit, self).get_context_data(**kwargs)
         form = self.form_class(instance=self.get_object(self))
         context = {
-            'form' : form,
-            'edit_mode' : self.edit_mode,
-            'back' : 'finadmin',
+            'form': form,
+            'edit_mode': self.edit_mode,
+            'back': 'finadmin',
         }
         return context
 
-    
+
 class FinAdminDelete(DeleteView):
     edit_mode = True
     delete_mode = True
@@ -136,28 +136,29 @@ class FinAdminDelete(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "The account has been deleted successfully.")
-        return super(FinAdminDelete,self).delete(self, request, *args, **kwargs)
+        return super(FinAdminDelete, self).delete(self, request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         account = self.model.objects.get(pk=self.kwargs['pk'])
         return account
-        
+
     def get_context_data(self, **kwargs):
         context = super(FinAdminDelete, self).get_context_data(**kwargs)
         form = self.form_class(instance=self.get_object(self))
         texta = 'Account'
         textb = texta.lower()
         context = {
-            'texta' : texta,
-            'textb' : textb,
-            'textc' : self.get_object(self),
-            'form' : form,
-            'edit_mode' : self.edit_mode,
-            'delete_mode' : self.delete_mode,
-            'back' : 'finadmin',
+            'texta': texta,
+            'textb': textb,
+            'textc': self.get_object(self),
+            'form': form,
+            'edit_mode': self.edit_mode,
+            'delete_mode': self.delete_mode,
+            'back': 'finadmin',
         }
         return context
-    
+
+
 # def inflowCreate(request):
 #     if request.method == "POST":
 #         form = CashInflowForm(request.POST)
@@ -183,9 +184,9 @@ class InflowCreate(CreateView):
         form = self.form_class()
         pageTitle = 'Add Cash Inflow'
         context = {
-            'form' : form,
-            'pageTitle' : pageTitle,
-            'back' : 'view',
+            'form': form,
+            'pageTitle': pageTitle,
+            'back': 'view',
         }
         return context
 
@@ -231,9 +232,9 @@ class InflowEdit(UpdateView):
         form = self.form_class(instance=self.get_object(self))
         pageTitle = 'Edit Cash Inflow'
         context = {
-            'form' : form,
-            'pageTitle' : pageTitle,
-            'back' : 'view',
+            'form': form,
+            'pageTitle': pageTitle,
+            'back': 'view',
         }
         return context
 
@@ -252,21 +253,21 @@ class InflowDelete(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "The transaction has been deleted successfully.")
-        return super(InflowDelete,self).delete(self, request, *args, **kwargs)
+        return super(InflowDelete, self).delete(self, request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         inflow = self.model.objects.get(pk=self.kwargs['pk'])
         return inflow
-        
+
     def get_context_data(self, **kwargs):
         context = super(InflowDelete, self).get_context_data(**kwargs)
         texta = 'Inflow'
         textb = texta.lower()
         context = {
-            'texta' : texta,
-            'textb' : textb,
-            'textc' : self.get_object(self),
-            'back' : 'view',
+            'texta': texta,
+            'textb': textb,
+            'textc': self.get_object(self),
+            'back': 'view',
         }
         return context
 
@@ -285,12 +286,12 @@ class OutflowCreate(CreateView):
         form = self.form_class()
         pageTitle = 'Add Cash Outflow'
         context = {
-            'form' : form,
-            'pageTitle' : pageTitle,
-            'back' : 'view',
+            'form': form,
+            'pageTitle': pageTitle,
+            'back': 'view',
         }
         return context
-        
+
 
 class OutflowEdit(UpdateView):
     model = CashOutflow
@@ -319,9 +320,9 @@ class OutflowEdit(UpdateView):
         form = self.form_class(instance=self.get_object(self))
         pageTitle = 'Edit Cash Outflow'
         context = {
-            'form' : form,
-            'pageTitle' : pageTitle,
-            'back' : 'view',
+            'form': form,
+            'pageTitle': pageTitle,
+            'back': 'view',
         }
         return context
 
@@ -333,20 +334,20 @@ class OutflowDelete(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "The transaction has been deleted successfully.")
-        return super(OutflowDelete,self).delete(self, request, *args, **kwargs)
+        return super(OutflowDelete, self).delete(self, request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         outflow = self.model.objects.get(pk=self.kwargs['pk'])
         return outflow
-        
+
     def get_context_data(self, **kwargs):
         context = super(OutflowDelete, self).get_context_data(**kwargs)
         texta = 'Outflow'
         textb = texta.lower()
         context = {
-            'texta' : texta,
-            'textb' : textb,
-            'textc' : self.get_object(self),
-            'back' : 'view',
+            'texta': texta,
+            'textb': textb,
+            'textc': self.get_object(self),
+            'back': 'view',
         }
         return context
