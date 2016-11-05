@@ -2,73 +2,70 @@
 {% load mathfilters %}
 
 <table width="100%" class="table table-striped table-hover" id="dataTables-out">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Reference</th>
-            <th>Account Title</th>
-            <th>Payee's Name</th>
-            <!--<th>Purpose</th>-->
-            <th>Amount</th>
-            <th>Document</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for outflow in all_outflows %}
-        <tr>
-            <td>{{ outflow.date }}</td>
-            <td>{{ outflow.flow_type }}</td>
-            <td>
-                <p class="text-center">{{ outflow.ref_num }}</p>
-            </td>
-            <td>{{ outflow.account_title }}</td>
-            <td>{{ outflow.payee }}</td>
-            <!--<td>{{ outflow.purpose }}</td>-->
-            <td>
-                <p class="text-right">{{ outflow.amount|intcomma }}</p>
-            </td>
-            <td>{{ outflow.document }}</td>
-            <td class="text-center">
-                <a data-toggle="modal" data-target="#notesModal{{ outflow.pk }}" data-toggle="tooltip" data-placement="bottom" title="Details"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a> &nbsp;
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Reference</th>
+      <th>Account Title</th>
+      <th>Payee's Name</th>
+      <!--<th>Purpose</th>-->
+      <th>Amount</th>
+      <th>Document</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for outflow in all_outflows %}
+      <tr>
+        <td>{{ outflow.date }}</td>
+        <td>{{ outflow.flow_type }}</td>
+        <td>
+          <p class="text-center">{{ outflow.ref_num }}</p>
+        </td>
+        <td>{{ outflow.account_title }}</td>
+        <td>{{ outflow.payee }}</td>
+        <!--<td>{{ outflow.purpose }}</td>-->
+        <td>
+          <p class="text-right">{{ outflow.amount|intcomma }}</p>
+        </td>
+        <td>{{ outflow.document }}</td>
+        <td class="text-center">
+          <a data-toggle="modal" data-target="#notesModal{{ outflow.pk }}" data-toggle="tooltip" data-placement="bottom" title="Details"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a> &nbsp;
 
-                <div class="modal fade" id="notesModal{{ outflow.pk }}" tabindex="-1" role="dialog" aria-labelledby="#notesModalLabel{{ outflow.pk }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="notesModalLabel{{ outflow.pk }}">Notes and Remarks</h4>
-                            </div>
-                            <div class="modal-body text-left">
-                                <h4>Purpose</h4>
-                                <p style="text-indent: 0.5in">{{ outflow.purpose }}</p>
-                                <hr/>
-                                <h4>Notes</h4>
-                                <p style="text-indent: 0.5in">
-                                    {% if outflow.notes %} 
-                                        {{ outflow.notes }} 
-                                    {% else %} 
-                                        None. 
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
+          <div class="modal fade" id="notesModal{{ outflow.pk }}" tabindex="-1" role="dialog" aria-labelledby="#notesModalLabel{{ outflow.pk }}"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="notesModalLabel{{ outflow.pk }}">Notes and Remarks</h4>
                 </div>
-                <!-- /.modal -->
+                <div class="modal-body text-left">
+                  <h4>Purpose</h4>
+                  <p style="text-indent: 0.5in">{{ outflow.purpose }}</p>
+                  <hr/>
+                  <h4>Notes</h4>
+                  <p style="text-indent: 0.5in">
+                    {% if outflow.notes %} {{ outflow.notes }} {% else %} None. {% endif %}
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
 
-                <a class="" href="{% url 'outflow-edit' pk=outflow.pk %}" data-toggle="tooltip" data-placement="bottom" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp; 
-                {% comment %}{% if user.is_superuser %}{% endcomment %}
-                    <a class="" href="{% url 'outflow-delete' pk=outflow.pk %}" data-toggle="tooltip" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a> 
-                {% comment %}{% endif %}{% endcomment %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+          <a class="" href="{% url 'outflow-edit' pk=outflow.pk %}" data-toggle="tooltip" data-placement="bottom" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp;
+          {% comment %}{% if user.is_superuser %}{% endcomment %}
+          <a class="" href="{% url 'outflow-delete' pk=outflow.pk %}" data-toggle="tooltip" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+          {% comment %}{% endif %}{% endcomment %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
 </table>

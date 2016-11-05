@@ -4,33 +4,32 @@
 <h4>Summary</h4>
 
 <div class="row panel-body text-left">
-    <!-- Define With Variables -->
-    {% with net_flow=total_inflow|sub:total_outflow %}
+  <!-- Define With Variables -->
+  {% with net_flow=total_inflow|sub:total_outflow %}
 
-    <p style="text-indent: 0.5in">
-        You have received PHP {{ total_inflow|intcomma }} and disbursed PHP {{ total_outflow|intcomma }}. Your net cash flow is PHP {{ net_flow|intcomma }} and you currently have PHP {{ balance|add:net_flow|intcomma }}.
-    </p>
-    
-    {% if test_mode %}
-    
+  <p style="text-indent: 0.5in">
+    You have received PHP {{ total_inflow|intcomma }} and disbursed PHP {{ total_outflow|intcomma }}. Your net cash flow is PHP
+    {{ net_flow|intcomma }} and you currently have PHP {{ balance|add:net_flow|intcomma }}.
+  </p>
+
+  {% if test_mode %}
     <hr/>
     <p style="text-indent: 0.5in">The balance of {{ title }} account is PHP {{ total_title|intcomma }}.</p>
     <p style="text-indent: 0.5in">The balance of {{ type }} group of accounts is PHP {{ total_type|intcomma }}.</p>
     <hr/>
     <p style="text-indent: 0.5in">Test value: {{ test }}</p>
-    
-    {% endif %}
+  {% endif %}
 
-    {% endwith %}
-    <!-- End Definition -->
+  {% endwith %}
+  <!-- End Definition -->
 </div>
 
 {% comment %}{% if user.is_authenticated %}{% endcomment %}
 <hr/>
 <div class="row text-left pull-right">
-    <a class="btn btn-primary" href="{% url 'inflow-add' %}" role="button">
-        <span class="glyphicon glyphicon-save" aria-hidden="true"></span> &nbsp; Add Inflow</a>
-    <a class="btn btn-primary" href="{% url 'outflow-add' %}" role="button">
-        <span class="glyphicon glyphicon-open" aria-hidden="true"></span> &nbsp; Add Outflow</a>
+  <a class="btn btn-primary" href="{% url 'inflow-add' %}" role="button">
+    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> &nbsp; Add Inflow</a>
+  <a class="btn btn-primary" href="{% url 'outflow-add' %}" role="button">
+    <span class="glyphicon glyphicon-open" aria-hidden="true"></span> &nbsp; Add Outflow</a>
 </div>
 {% comment %}{% endif %}{% endcomment %}
