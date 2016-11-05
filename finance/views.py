@@ -10,28 +10,6 @@ from .methods import *
 from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
 
 
-def index(request):
-    context = {
-        'all_inflows' : CashInflow.objects.all(),
-        'all_outflows' : CashOutflow.objects.all(),
-        'all_accounts' : ChartOfAccounts.objects.all(),
-        'all_account_types' : AccountTypes.objects.all(),
-        'total_inflow' : sumFlow(CashInflow, monthed),
-        'total_outflow' : sumFlow(CashOutflow, monthed),
-        'title' : getField(num),
-        'total_title' : sumRefnumNet(num),
-        'type' : getType(num),
-        'total_type' : sumTypeNet(getType(num)),
-        'list_accounts' : listAccounts(),
-        'list_types' : listTypes(),
-        'balance' : Decimal(balance).quantize(Decimal('.01')),
-        'beg_of_month' : str(1) + ' ' + month_name[now.month] + ' ' + str(now.year),
-        'end_of_month' : str(monthrange(now.year, now.month)[1]) + ' ' + month_name[now.month] + ' ' + str(now.year),
-        'test' : CashOutflow.objects.filter(date__month=now.month).aggregate(Sum('amount'))
-    }
-    return render(request, 'finance/view.html', context)
-
-
 def view(request):
     context = {
         'all_inflows' : CashInflow.objects.all(),
@@ -43,7 +21,8 @@ def view(request):
         'total_title' : sumRefnumNet(num, monthed),
         'type' : getType(num),
         'total_type' : sumTypeNet(getType(num), monthed),
-        'test' : str(sumRefnumInflow(num, monthed)) + ' - ' + str(sumRefnumOutflow(num, monthed)),
+        'balance' : Decimal(balance).quantize(Decimal('.01')),
+        'test_mode' : test_mode,
     }
     return render(request, 'finance/view.html', context)
 
@@ -59,10 +38,14 @@ def statement(request):
         'list_accounts' : listAccounts(),
         'list_types' : listTypes(),
         'balance' : Decimal(balance).quantize(Decimal('.01')),
-        'beg_of_month' : str(1) + ' ' + month_name[now.month] + ' ' + str(now.year),
-        'end_of_month' : str(monthrange(now.year, now.month)[1]) + ' ' + month_name[now.month] + ' ' + str(now.year),
+        'in_bank' : Decimal(in_bank).quantize(Decimal('.01')),
     }
     return render(request, 'finance/statement.html', context)
+
+
+def toggleMonthed(request):
+    toggleMonthedMethod()
+    return redirect('statement')
 
 
 def finAdmin(request):
@@ -82,6 +65,31 @@ def finAdmin(request):
         'back' : 'finadmin',
     }
     return render(request, 'finance/fin-admin.html', context)
+
+
+class FinAdmin(CreateView):
+    form_class = ChartOfAccountsForm
+    template_name = 'finance/fin-admin.html'
+
+    def get(self, request, *args, **kwargs):
+        messages.warning(self.request, "Make sure you know what you are doing.")
+        return super(FinAdmin, self).get(request, *args, **kwargs)
+        
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, "This account has been created.")
+        return render(self.request, 'finance/fin-admin.html', self.get_context_data())
+
+    def get_context_data(self, **kwargs):
+        context = super(FinAdmin, self).get_context_data(**kwargs)
+        form = self.form_class()
+        context = {
+            'form' : form,
+            'all_accounts' : ChartOfAccounts.objects.all(),
+            'all_account_types' : AccountTypes.objects.all(),
+            'back' : 'finadmin',
+        }
+        return context
 
 
 class FinAdminEdit(UpdateView):
@@ -119,7 +127,9 @@ class FinAdminEdit(UpdateView):
 
     
 class FinAdminDelete(DeleteView):
+    edit_mode = True
     delete_mode = True
+    form_class = ChartOfAccountsForm
     model = ChartOfAccounts
     template_name = 'finance/fin-admin.html'
     success_url = reverse_lazy('finadmin')
@@ -134,35 +144,29 @@ class FinAdminDelete(DeleteView):
         
     def get_context_data(self, **kwargs):
         context = super(FinAdminDelete, self).get_context_data(**kwargs)
+        form = self.form_class(instance=self.get_object(self))
         texta = 'Account'
         textb = texta.lower()
         context = {
             'texta' : texta,
             'textb' : textb,
             'textc' : self.get_object(self),
+            'form' : form,
+            'edit_mode' : self.edit_mode,
             'delete_mode' : self.delete_mode,
             'back' : 'finadmin',
         }
         return context
     
-    
-def inflows(request):
-    all_inflows = CashInflow.objects.all()
-    context = {
-        'all_inflows' : all_inflows,
-    }
-    return render(request, 'finance/inflows.html', context)
-
-
-''' def inflowCreate(request):
-    if request.method == "POST":
-        form = CashInflowForm(request.POST)
-        if form.is_valid():
-            inflow = form.save(commit=False)
-            inflow.save()
-    else:
-        form = CashInflowForm()
-    return render(request, 'finance/inflow-form.html', {'form': form}) '''
+# def inflowCreate(request):
+#     if request.method == "POST":
+#         form = CashInflowForm(request.POST)
+#         if form.is_valid():
+#             inflow = form.save(commit=False)
+#             inflow.save()
+#     else:
+#         form = CashInflowForm()
+#     return render(request, 'finance/inflow-form.html', {'form': form})
 
 
 class InflowCreate(CreateView):
@@ -181,22 +185,23 @@ class InflowCreate(CreateView):
         context = {
             'form' : form,
             'pageTitle' : pageTitle,
+            'back' : 'view',
         }
         return context
 
 
-''' def inflowEdit(request, pk):
-    inflow = get_object_or_404(CashInflow, pk=pk)
-    if request.method == "POST":
-        form = CashInflowForm(request.POST, instance=inflow)
-        if form.is_valid():
-            inflow = form.save(commit=False)
-            inflow.save()
-            # return redirect('inflowEdit', pk=inflow.pk)
-            return redirect('index')
-    else:
-        form = CashInflowForm(instance=inflow)
-    return render(request, 'finance/inflow-form.html', {'form': form}) '''
+# def inflowEdit(request, pk):
+#     inflow = get_object_or_404(CashInflow, pk=pk)
+#     if request.method == "POST":
+#         form = CashInflowForm(request.POST, instance=inflow)
+#         if form.is_valid():
+#             inflow = form.save(commit=False)
+#             inflow.save()
+#             # return redirect('inflowEdit', pk=inflow.pk)
+#             return redirect('index')
+#     else:
+#         form = CashInflowForm(instance=inflow)
+#     return render(request, 'finance/inflow-form.html', {'form': form})
 
 
 class InflowEdit(UpdateView):
@@ -218,7 +223,7 @@ class InflowEdit(UpdateView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, "The transaction has been updated.")
-        return redirect('index')
+        return redirect('view')
         # return render(self.request, 'finance/generic-form.html', self.get_context_data())
 
     def get_context_data(self, **kwargs):
@@ -228,21 +233,22 @@ class InflowEdit(UpdateView):
         context = {
             'form' : form,
             'pageTitle' : pageTitle,
+            'back' : 'view',
         }
         return context
 
 
-''' def inflowDelete(request, pk):
-    inflow = get_object_or_404(CashInflow, pk=pk)
-    inflow.delete()
-    # outflows = outflow.objects.filter(user=request.user)
-    return redirect('index') '''
+# def inflowDelete(request, pk):
+#     inflow = get_object_or_404(CashInflow, pk=pk)
+#     inflow.delete()
+#     # outflows = outflow.objects.filter(user=request.user)
+#     return redirect('index')
 
 
 class InflowDelete(DeleteView):
     model = CashInflow
     template_name = 'finance/delete-template.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('view')
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "The transaction has been deleted successfully.")
@@ -260,6 +266,7 @@ class InflowDelete(DeleteView):
             'texta' : texta,
             'textb' : textb,
             'textc' : self.get_object(self),
+            'back' : 'view',
         }
         return context
 
@@ -288,6 +295,7 @@ class OutflowCreate(CreateView):
         context = {
             'form' : form,
             'pageTitle' : pageTitle,
+            'back' : 'view',
         }
         return context
         
@@ -311,7 +319,7 @@ class OutflowEdit(UpdateView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, "The transaction has been updated.")
-        return redirect('index')
+        return redirect('view')
         # return render(self.request, 'finance/generic-form.html', self.get_context_data())
 
     def get_context_data(self, **kwargs):
@@ -321,6 +329,7 @@ class OutflowEdit(UpdateView):
         context = {
             'form' : form,
             'pageTitle' : pageTitle,
+            'back' : 'view',
         }
         return context
 
@@ -328,7 +337,7 @@ class OutflowEdit(UpdateView):
 class OutflowDelete(DeleteView):
     model = CashOutflow
     template_name = 'finance/delete-template.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('view')
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, "The transaction has been deleted successfully.")
@@ -346,83 +355,6 @@ class OutflowDelete(DeleteView):
             'texta' : texta,
             'textb' : textb,
             'textc' : self.get_object(self),
-        }
-        return context
-
-
-class AccountCreate(CreateView):
-    form_class = ChartOfAccountsForm
-    template_name = 'finance/generic-form.html'
-
-    def form_valid(self, form):
-        form.save()
-        messages.success(self.request, "This account has been added.")
-        return render(self.request, 'finance/generic-form.html', self.get_context_data())
-
-    def get_context_data(self, **kwargs):
-        context = super(AccountCreate, self).get_context_data(**kwargs)
-        form = self.form_class()
-        pageTitle = 'Add Account'
-        context = {
-            'form' : form,
-            'pageTitle' : pageTitle,
-        }
-        return context
-
-
-class AccountEdit(UpdateView):
-    model = ChartOfAccounts
-    form_class = ChartOfAccountsForm
-    template_name = 'finance/generic-form.html'
-
-    def get(self, request, **kwargs):
-        self.object = self.model.objects.get(pk=self.kwargs['pk'])
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        context = self.get_context_data(object=self.object, form=form)
-        return self.render_to_response(context)
-
-    def get_object(self, queryset=None):
-        account = self.model.objects.get(pk=self.kwargs['pk'])
-        return account
-
-    def form_valid(self, form):
-        form.save()
-        messages.success(self.request, "The account has been updated.")
-        return redirect('index')
-        # return render(self.request, 'finance/generic-form.html', self.get_context_data())
-
-    def get_context_data(self, **kwargs):
-        context = super(AccountEdit, self).get_context_data(**kwargs)
-        form = self.form_class(instance=self.get_object(self))
-        pageTitle = 'Edit Account'
-        context = {
-            'form' : form,
-            'pageTitle' : pageTitle,
-        }
-        return context
-
-    
-class AccountDelete(DeleteView):
-    model = ChartOfAccounts
-    template_name = 'finance/delete-template.html'
-    success_url = reverse_lazy('index')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, "The account has been deleted successfully.")
-        return super(AccountDelete, self).delete(self, request, *args, **kwargs)
-
-    def get_object(self, queryset=None):
-        account = self.model.objects.get(pk=self.kwargs['pk'])
-        return account
-        
-    def get_context_data(self, **kwargs):
-        context = super(AccountDelete, self).get_context_data(**kwargs)
-        texta = 'Account'
-        textb = texta.lower()
-        context = {
-            'texta' : texta,
-            'textb' : textb,
-            'textc' : self.get_object(self),
+            'back' : 'view',
         }
         return context

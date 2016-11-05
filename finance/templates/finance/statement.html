@@ -8,7 +8,7 @@
 
 {% block body %}
 
-{% with net_flow=total_inflow|sub:total_outflow %}
+{% with net_flow=total_inflow|sub:total_outflow ending_cash=balance|addition:total_inflow|sub:total_outflow %}
 
 {% comment %}
 <div class="row text-right">
@@ -36,91 +36,126 @@
 </div>
 {% endcomment %}
 
-<div class="row">
-    <p class="text-center">
-        <b> Kalayaan Residence Hall Association </b> <br/>
-        Kalayaan Residence Hall House Council <br/>
-        Statement of Cash Flows <br/>
-        For the interim period ended {{ end_of_month }} <br/>
-    </p>
+{% comment %}
+<div class="row text-right">
+    <a href='{% url 'toggle-monthed' %}' class="btn btn-default" role="button">{% if monthed %} All View {% else %} Month View {% endif %}</a>
 </div>
+{% endcomment %}
 
-<div class="row col-sm-12"><b><p>Cash Inflows</p></b></div>
+<div class="col-sm-9 center-block" style="float:none;">
 
-{% for account_type in list_types %}
-    {% if account_type.inflow > 0 %}
-    <div class="col-sm-12" style="text-indent: 0.25in"><b>{{ account_type.type }}</b></div>
-    {% for account in list_accounts %}
-        {% if account.inflow > 0 and account.type == account_type.type %}
-            <div class="row col-sm-12">
-                <div class="col-sm-6" style="text-indent: 0.5in"><b>{{ account.num }}&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ account.title }}</div>
-                <div class="col-sm-1 text-right">PHP</div>
-                <div class="col-sm-2 text-right">{{ account.inflow|abs|intcomma}} </div>
-            </div>
+    <div class="row">
+        <p class="text-center">
+            <b> Kalayaan Residence Hall Association </b> <br/>
+            Kalayaan Residence Hall House Council <br/>
+            Statement of Cash Flows <br/>
+            For the interim period ended 31 October 2016 <br/>
+        </p>
+    </div>
+
+    <div class="row panel-body"></div>
+
+    <div class="row col-sm-12"><b><p>Cash Inflows</p></b></div>
+
+    {% for account_type in list_types %}
+        {% if account_type.inflow > 0 %}
+        <div class="col-sm-12" style="text-indent: 0.25in"><b>{{ account_type.type }}</b></div>
+        {% for account in list_accounts %}
+            {% if account.inflow > 0 and account.type == account_type.type %}
+                <div class="row col-sm-12">
+                    <div class="col-sm-6" style="text-indent: 0.5in"><b>{{ account.num }}&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ account.title }}</div>
+                    <div class="col-sm-1 text-right">PHP</div>
+                    <div class="col-sm-2 text-right">{{ account.inflow|abs|intcomma}} </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="row">
+            <div class="col-sm-9"><p style="text-indent: 1in">Total</p></div>
+            <div class="col-sm-1 text-right">PHP</div>
+            <div class="col-sm-2 text-right">{{ account_type.inflow|abs|intcomma }}</div>
+        </div>
         {% endif %}
     {% endfor %}
+
     <div class="row"><b>
-        <div class="col-sm-9"><p style="text-indent: 1in">Total {{ account_type.type }}</p></div>
+        <div class="col-sm-9"><p style="text-indent: 1in">Total Inflows</p></div>
         <div class="col-sm-1 text-right">PHP</div>
-        <div class="col-sm-2 text-right">{{ account_type.inflow|abs|intcomma }}</div>
+        <div class="col-sm-2 text-right">{{ total_inflow|abs|intcomma }}</div>
     </b></div>
-    {% endif %}
-{% endfor %}
 
-<div class="row"><b>
-    <div class="col-sm-9"><p style="text-indent: 1in">Total Inflows</p></div>
-    <div class="col-sm-1 text-right">PHP</div>
-    <div class="col-sm-2 text-right">{{ total_inflow|abs|intcomma }}</div>
-</b></div>
+    <div class="row col-sm-12"><b><p>Cash Outflows</p></b></div>
 
-<div class="row col-sm-12"><b><p>Cash Outflows</p></b></div>
-
-{% for account_type in list_types %}
-    {% if account_type.outflow > 0 %}
-    <div class="col-sm-12" style="text-indent: 0.25in"><b>{{ account_type.type }}</b></div>
-    {% for account in list_accounts %}
-        {% if account.outflow > 0 and account.type == account_type.type %}
-            <div class="row col-sm-12">
-                <div class="col-sm-6" style="text-indent: 0.5in"><b>{{ account.num }}&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ account.title }}</div>
-                <div class="col-sm-1 text-right">PHP</div>
-                <div class="col-sm-2 text-right">{{ account.outflow|abs|intcomma}} </div>
-            </div>
+    {% for account_type in list_types %}
+        {% if account_type.outflow > 0 %}
+        <div class="col-sm-12" style="text-indent: 0.25in"><b>{{ account_type.type }}</b></div>
+        {% for account in list_accounts %}
+            {% if account.outflow > 0 and account.type == account_type.type %}
+                <div class="row col-sm-12">
+                    <div class="col-sm-6" style="text-indent: 0.5in"><b>{{ account.num }}&nbsp;&nbsp;&nbsp;&nbsp;</b>{{ account.title }}</div>
+                    <div class="col-sm-1 text-right">PHP</div>
+                    <div class="col-sm-2 text-right">{{ account.outflow|abs|intcomma}} </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="row">
+            <div class="col-sm-9"><p style="text-indent: 1in">Total</p></div>
+            <div class="col-sm-1 text-right">PHP</div>
+            <div class="col-sm-2 text-right">{{ account_type.outflow|abs|intcomma }}</div>
+        </div>
         {% endif %}
     {% endfor %}
+
     <div class="row"><b>
-        <div class="col-sm-9"><p style="text-indent: 1in">Total {{ account_type.type }}</p></div>
-        <div class="col-sm-1 text-right">PHP</div>
-        <div class="col-sm-2 text-right">{{ account_type.outflow|abs|intcomma }}</div>
+        <div class="col-sm-10"><p style="text-indent: 1in">Total Outflows</p></div>
+        <div class="col-sm-2 text-right">{{ total_outflow|abs|intcomma }}</div>
     </b></div>
-    {% endif %}
-{% endfor %}
 
-<div class="row"><b>
-    <div class="col-sm-10"><p style="text-indent: 1in">Total Outflows</p></div>
-    <div class="col-sm-2 text-right">{{ total_outflow|abs|intcomma }}</div>
-</b></div>
+    <div class="row panel-body"></div>
 
-<div class="row panel-body"></div>
+    <div class="row"><b>
+        <div class="col-sm-9"><b>Net Cash Flow</b></div>
+        <div class="col-sm-1 text-right">PHP</div>
+        <div class="col-sm-2 text-right">{{ net_flow|intcomma }}</div>
+    </b></div>
 
-<div class="row"><b>
-    <div class="col-sm-9"><b>Net Cash Flow</b></div>
-    <div class="col-sm-1 text-right">PHP</div>
-    <div class="col-sm-2 text-right">{{ net_flow|intcomma }}</div>
-</b></div>
+    <div class="row">
+        <div class="col-sm-10">Beginning Balance, 1 October 2016</div>
+        <div class="col-sm-2 text-right">{{ balance|abs|intcomma }}</div>
+    </div>
 
-<div class="row">
-    <div class="col-sm-10">Beginning Balance, {{ beg_of_month }}</div>
-    <div class="col-sm-2 text-right">{{ balance|abs|intcomma }}</div>
+    <div class="row"><b>
+        <div class="col-sm-9"><b>Ending Cash Balance</b></div>
+        <div class="col-sm-1 text-right"> PHP </div>
+        <div class="col-sm-2 text-right">{{ ending_cash|intcomma }}</div>
+    </b></div>
+
+    <div class="row panel-body"></div>
+
+    <div class="row"><b>
+        <div class="col-sm-12"><b>Classification of Ending Balance</b></div>
+    </b></div>
+
+    <div class="row">
+        <div class="col-sm-9">Cash On Hand</div>
+        <div class="col-sm-1 text-right">PHP</div>
+        <div class="col-sm-2 text-right">{{ ending_cash|sub:in_bank|intcomma }}</div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10">Cash in Bank</div>
+        <div class="col-sm-2 text-right">{{ in_bank|intcomma }}</div>
+    </div>
+
+    <div class="row"><b>
+        <div class="col-sm-9"><b>Cash Balance, 31 October 2016</b></div>
+        <div class="col-sm-1 text-right"> PHP </div>
+        <div class="col-sm-2 text-right">{{ ending_cash|intcomma }}</div>
+    </b></div>
+
+    <div class="row panel-body"></div>
+
 </div>
-
-<div class="row"><b>
-    <div class="col-sm-9"><b>Ending Cash, {{ end_of_month }}</b></div>
-    <div class="col-sm-1 text-right"> PHP </div>
-    <div class="col-sm-2 text-right">{{ balance|addition:net_flow|intcomma }}</div>
-</b></div>
-
-<div class="row panel-body"></div>
-
+    
 {% endwith %}
 
 {% endblock %}

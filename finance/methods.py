@@ -2,20 +2,29 @@ from datetime import *
 from decimal import *
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Sum
+from django.db.models import Min, Sum
 
 from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
-
 
 # Global Variables
 
 now = datetime.now() # Do not change.
-
-num = 32
-balance = 139648.70
 monthed = False
+test_mode = False
+
+month = 10
+num = 32
+balance = 124795.70
+in_bank = 99510.20
 
 # Methods
+
+def toggleMonthedMethod():
+    " Toggle state of boolean monthed "
+    global monthed 
+    monthed = not monthed
+    return monthed
+
 
 def convertNone(value):
     " Convert Nonetype to 0 "
@@ -48,7 +57,7 @@ def sumFlow(model, monthed=True):
     " Get sum of amount in model "
     if monthed:
         now = datetime.now()
-        sum = model.objects.filter(date__month=now.month).aggregate(Sum('amount'))
+        sum = model.objects.filter(date__month=month).aggregate(Sum('amount'))
     else:
         sum = model.objects.all().aggregate(Sum('amount'))
     return convertNone(sum)
@@ -58,7 +67,7 @@ def sumTypeInflow(account_type, monthed=True):
     " Get sum of amount of flow_type in models.CashInflow "
     if monthed:
         now = datetime.now()
-        inflow = CashInflow.objects.filter(date__month=now.month, flow_type=account_type).aggregate(Sum('amount'))
+        inflow = CashInflow.objects.filter(date__month=month, flow_type=account_type).aggregate(Sum('amount'))
     else:
         inflow = CashInflow.objects.filter(flow_type=account_type).aggregate(Sum('amount'))
     return convertNone(inflow)
@@ -68,7 +77,7 @@ def sumTypeOutflow(account_type, monthed=True):
     " Get sum of amount of flow_type in models.CashOutflow "
     if monthed:
         now = datetime.now()
-        outflow = CashOutflow.objects.filter(date__month=now.month, flow_type=account_type).aggregate(Sum('amount'))
+        outflow = CashOutflow.objects.filter(date__month=month, flow_type=account_type).aggregate(Sum('amount'))
     else:
         outflow = CashOutflow.objects.filter(flow_type=account_type).aggregate(Sum('amount'))
     return convertNone(outflow)
@@ -84,7 +93,7 @@ def sumRefnumInflow(num, monthed=True):
     " Get sum of amount of ref_num in models.CashInflow "
     if monthed:
         now = datetime.now()
-        inflow = CashInflow.objects.filter(date__month=now.month, ref_num=num).aggregate(Sum('amount'))
+        inflow = CashInflow.objects.filter(date__month=month, ref_num=num).aggregate(Sum('amount'))
     else:
         inflow = CashInflow.objects.filter(ref_num=num).aggregate(Sum('amount'))
     return convertNone(inflow)
@@ -94,7 +103,7 @@ def sumRefnumOutflow(num, monthed=True):
     " Get sum of amount of ref_num in models.CashOutflow "
     if monthed:
         now = datetime.now()
-        outflow = CashOutflow.objects.filter(date__month=now.month, ref_num=num).aggregate(Sum('amount'))
+        outflow = CashOutflow.objects.filter(date__month=month, ref_num=num).aggregate(Sum('amount'))
     else:
         outflow = CashOutflow.objects.filter(ref_num=num).aggregate(Sum('amount'))
     return convertNone(outflow)
@@ -122,7 +131,7 @@ def listAccounts():
 
 
 def listTypes():
-    " List type with respective balances "
+    " List account_types with respective balances "
     type_list = []
     for account_type in AccountTypes.objects.all():
         type_details = {}

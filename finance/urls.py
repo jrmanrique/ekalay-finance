@@ -4,10 +4,10 @@ from . import views
 
 urlpatterns = [
 #     /finance/
-#     url(r'^$', views.index, name='index'),
     url(r'^$', views.view, name='index'),
     url(r'^view/$', views.view, name='view'),
     url(r'^statement/$', views.statement, name='statement'),
+    url(r'^statement/toggle$', views.toggleMonthed, name='toggle-monthed'),
 #     url(r'^edit/$', views.edit, name='edit'),
 
 #     /finance/inflows
@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^outflows/(?P<pk>\d+)/delete/$', views.OutflowDelete.as_view(), name='outflow-delete'),
  
 #     /finance/admin
-    url(r'^admin/$', views.finAdmin, name='finadmin'),
+    url(r'^admin/$', views.FinAdmin.as_view(), name='finadmin'),
     url(r'^admin/edit/(?P<pk>\d+)$', views.FinAdminEdit.as_view(), name='finadmin-edit'),
     url(r'^admin/delete/(?P<pk>\d+)$', views.FinAdminDelete.as_view(), name='finadmin-delete'),
 ]

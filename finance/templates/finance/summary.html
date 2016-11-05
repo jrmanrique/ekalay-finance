@@ -8,13 +8,18 @@
     {% with net_flow=total_inflow|sub:total_outflow %}
 
     <p style="text-indent: 0.5in">
-        {% if monthed %}As of this month{% else %}All in all{% endif %}, you have received PHP {{ total_inflow|intcomma }} and disbursed PHP {{ total_outflow|intcomma }}; you currently have PHP {{ net_flow|intcomma }}.
+        You have received PHP {{ total_inflow|intcomma }} and disbursed PHP {{ total_outflow|intcomma }}. Your net cash flow is PHP {{ net_flow|intcomma }} and you currently have PHP {{ balance|add:net_flow|intcomma }}.
     </p>
+    
+    {% if test_mode %}
+    
     <hr/>
     <p style="text-indent: 0.5in">The balance of {{ title }} account is PHP {{ total_title|intcomma }}.</p>
     <p style="text-indent: 0.5in">The balance of {{ type }} group of accounts is PHP {{ total_type|intcomma }}.</p>
     <hr/>
     <p style="text-indent: 0.5in">Test value: {{ test }}</p>
+    
+    {% endif %}
 
     {% endwith %}
     <!-- End Definition -->
