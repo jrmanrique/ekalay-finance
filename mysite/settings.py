@@ -26,7 +26,8 @@ SECRET_KEY = 'p_umtd4#$*f5&oz0cfv6i558z6#61tl&r%ky5dn1!5(0ii+mr4'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'ekalay-finance-jrmanrique.codeanyapp.com'
+    '127.0.0.1',
+    'ekalay-finance-jrmanrique.codeanyapp.com',
 ]
 
 
