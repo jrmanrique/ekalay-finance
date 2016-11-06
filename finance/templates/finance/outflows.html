@@ -62,7 +62,42 @@
 
           <a class="" href="{% url 'outflow-edit' pk=outflow.pk slug=outflow.slug %}" data-toggle="tooltip" data-placement="bottom" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp;
           {% comment %}{% if user.is_superuser %}{% endcomment %}
-          <a class="" href="{% url 'outflow-delete' pk=outflow.pk slug=outflow.slug %}" data-toggle="tooltip" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+          <a data-toggle="modal" data-target="#deleteModal{{ outflow.pk }}" data-toggle="tooltip" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a> &nbsp;
+
+          <div class="modal fade" id="deleteModal{{ outflow.pk }}" tabindex="-1" role="dialog" aria-labelledby="#deleteModalLabel{{ outflow.pk }}"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="deleteModalLabel{{ outflow.pk }}">Notes and Remarks</h4>
+                </div>
+                <div class="modal-body text-left">
+                  <div class="row panel-body">
+                    <p>Are you sure you want to delete this outflow?</p>
+                    <ul>
+                    <li>Date: {{ outflow.date }}</li>
+                    <li>Account: {{ outflow.ref_num }} {{ outflow.account_title }}</li>
+                    <li>Payee's Name: {{ outflow.payee }}</li>
+                    <li>Amount: PHP {{ outflow.amount|intcomma }}</li>
+                    <li>Purpose: {{ outflow.purpose }}</li>
+                    <li>Document: {{ outflow.document }}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <form action="{% url 'outflow-delete' pk=outflow.pk slug=outflow.slug %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Yes, delete.</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No, cancel.</button>
+                  </form>
+                </div>
+              </div>
+              <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
           {% comment %}{% endif %}{% endcomment %}
         </td>
       </tr>

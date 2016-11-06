@@ -1,7 +1,7 @@
 from calendar import monthrange, month_name # Currently unused.
 
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -211,7 +211,7 @@ class FlowAdd(TemplateView):
 
 class InflowCreate(CreateView):
     form_class = CashInflowForm
-    template_name = 'finance/add.html'
+    template_name = 'finance/generic-form.html'
 
     def form_valid(self, form):
         form.save()
@@ -223,7 +223,7 @@ class InflowCreate(CreateView):
         form = self.form_class()
         pageTitle = 'Add Cash Inflow'
         context = {
-            'aform': form,
+            'form': form,
             'pageTitle': pageTitle,
             'back': 'view',
         }
@@ -278,42 +278,44 @@ class InflowEdit(UpdateView):
         return context
 
 
-# def inflowDelete(request, pk):
-#     inflow = get_object_or_404(CashInflow, pk=pk)
-#     inflow.delete()
-#     # outflows = outflow.objects.filter(user=request.user)
-#     return redirect('index')
+def inflowDelete(request, pk, slug):
+    if request.method == 'POST':
+        inflow = get_object_or_404(CashInflow, pk=pk)
+        inflow.delete()
+        messages.success(request, "The transaction has been deleted successfully.")
+    # outflows = outflow.objects.filter(user=request.user)
+    return redirect('view')
 
 
-class InflowDelete(DeleteView):
-    model = CashInflow
-    template_name = 'finance/delete-template.html'
-    success_url = reverse_lazy('view')
+# class InflowDelete(DeleteView):
+#     model = CashInflow
+#     template_name = 'finance/delete-template.html'
+#     success_url = reverse_lazy('view')
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, "The transaction has been deleted successfully.")
-        return super(InflowDelete, self).delete(self, request, *args, **kwargs)
+#     def delete(self, request, *args, **kwargs):
+#         messages.success(self.request, "The transaction has been deleted successfully.")
+#         return super(InflowDelete, self).delete(self, request, *args, **kwargs)
 
-    def get_object(self, queryset=None):
-        inflow = self.model.objects.get(pk=self.kwargs['pk'])
-        return inflow
+#     def get_object(self, queryset=None):
+#         inflow = self.model.objects.get(pk=self.kwargs['pk'])
+#         return inflow
 
-    def get_context_data(self, **kwargs):
-        context = super(InflowDelete, self).get_context_data(**kwargs)
-        texta = 'Inflow'
-        textb = texta.lower()
-        context = {
-            'texta': texta,
-            'textb': textb,
-            'textc': self.get_object(self),
-            'back': 'view',
-        }
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(InflowDelete, self).get_context_data(**kwargs)
+#         texta = 'Inflow'
+#         textb = texta.lower()
+#         context = {
+#             'texta': texta,
+#             'textb': textb,
+#             'textc': self.get_object(self),
+#             'back': 'view',
+#         }
+#         return context
 
 
 class OutflowCreate(CreateView):
     form_class = CashOutflowForm
-    template_name = 'finance/add.html'
+    template_name = 'finance/generic-form.html'
 
     def form_valid(self, form):
         form.save()
@@ -325,7 +327,7 @@ class OutflowCreate(CreateView):
         form = self.form_class()
         pageTitle = 'Add Cash Outflow'
         context = {
-            'bform': form,
+            'aform': form,
             'pageTitle': pageTitle,
             'back': 'view',
         }
@@ -366,27 +368,10 @@ class OutflowEdit(UpdateView):
         return context
 
 
-class OutflowDelete(DeleteView):
-    model = CashOutflow
-    template_name = 'finance/delete-template.html'
-    success_url = reverse_lazy('view')
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, "The transaction has been deleted successfully.")
-        return super(OutflowDelete, self).delete(self, request, *args, **kwargs)
-
-    def get_object(self, queryset=None):
-        outflow = self.model.objects.get(pk=self.kwargs['pk'])
-        return outflow
-
-    def get_context_data(self, **kwargs):
-        context = super(OutflowDelete, self).get_context_data(**kwargs)
-        texta = 'Outflow'
-        textb = texta.lower()
-        context = {
-            'texta': texta,
-            'textb': textb,
-            'textc': self.get_object(self),
-            'back': 'view',
-        }
-        return context
+def outflowDelete(request, pk, slug):
+    if request.method == 'POST':
+        outflow = get_object_or_404(CashInflow, pk=pk)
+        outflow.delete()
+        messages.success(request, "The transaction has been deleted successfully.")
+    # outflows = outflow.objects.filter(user=request.user)
+    return redirect('view')
