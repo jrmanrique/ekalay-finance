@@ -8,8 +8,7 @@
   {% with net_flow=total_inflow|sub:total_outflow %}
 
   <p style="text-indent: 0.5in">
-    You have received PHP {{ total_inflow|intcomma }} and disbursed PHP {{ total_outflow|intcomma }}. Your net cash flow is PHP
-    {{ net_flow|intcomma }} and you currently have PHP {{ balance|add:net_flow|intcomma }}.
+    You have received PHP {{ total_inflow|intcomma }} and disbursed PHP {{ total_outflow|intcomma }}. Your net cash flow is PHP {{ net_flow|intcomma }} and you currently have PHP {{ balance|add:net_flow|intcomma }}.
   </p>
 
   {% if test_mode %}

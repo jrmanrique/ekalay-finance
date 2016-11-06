@@ -3,6 +3,7 @@ from calendar import monthrange, month_name # Currently unused.
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .forms import CashInflowForm, CashOutflowForm, ChartOfAccountsForm
@@ -23,6 +24,7 @@ def index(request):
         'total_type': sumTypeNet(getType(num), monthed),
         'balance': Decimal(balance).quantize(Decimal('.01')),
         'test_mode': test_mode,
+        'test' : now,
     }
     return render(request, 'finance/index.html', context)
 
@@ -157,6 +159,43 @@ class FinAdminDelete(DeleteView):
             'back': 'finadmin',
         }
         return context
+
+
+def _get_form(request, formcls, prefix):
+    data = request.POST if prefix in next(iter(request.POST.keys())) else None
+    return formcls(data, prefix=prefix)
+
+
+class FlowAdd(TemplateView):
+    template_name = 'finance/add.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'back': 'view',
+            'aform': CashInflowForm(prefix='aform_pre'),
+            'bform': CashOutflowForm(prefix='bform_pre')
+        }
+        # return render(request, template_name, context)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        aform = _get_form(request, CashInflowForm, 'aform_pre')
+        bform = _get_form(request, CashOutflowForm, 'bform_pre')
+        if aform.is_bound and aform.is_valid():
+            form = aform.save(commit=False)
+            messages.success(self.request, "This transaction has been recorded.")
+            form.save()
+        elif bform.is_bound and bform.is_valid():
+            form = bform.save(commit=False)
+            messages.success(self.request, "This transaction has been recorded.")
+            form.save()
+        context = {
+            'back': 'view',
+            'aform': aform,
+            'bform': bform,
+        }
+        # return render(request, template_name, context)
+        return self.render_to_response(context)
 
 
 # def inflowCreate(request):

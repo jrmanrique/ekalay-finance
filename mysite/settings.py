@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'finance.apps.FinanceConfig',
+    'finance.templatetags.filters',
     'mathfilters',
 ]
 

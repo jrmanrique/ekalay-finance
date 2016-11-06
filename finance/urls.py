@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^view/$', views.index, name='view'),
 #     url(r'^edit/$', views.edit, name='edit'),
+    url(r'^add/$', views.FlowAdd.as_view(), name='add'),
 
 #     /finance/inflows/
     url(r'^inflows/add/$', views.InflowCreate.as_view(), name='inflow-add'),
