@@ -58,9 +58,9 @@
         </div>
         <!-- /.modal -->
 
-        <a class="" href="{% url 'inflow-edit' pk=inflow.pk %}"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="bottom" title="Edit"></span></a>        &nbsp;
+        <a class="" href="{% url 'inflow-edit' pk=inflow.pk slug=inflow.slug %}"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="bottom" title="Edit"></span></a>        &nbsp;
         {% comment %}{% if user.is_superuser %}{% endcomment %}
-        <a class="" href="{% url 'inflow-delete' pk=inflow.pk %}" data-toggle="tooltip" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+        <a class="" href="{% url 'inflow-delete' pk=inflow.pk slug=inflow.slug %}" data-toggle="tooltip" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
         {% comment %}{% endif %}{% endcomment %}
       </td>
     </tr>

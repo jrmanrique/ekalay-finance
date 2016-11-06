@@ -22,8 +22,8 @@
       <td>{{ account.account_type }}</td>
       {% comment %} {% if user.is_superuser %} {% endcomment %}
       <td class="col-md-2 text-center">
-        <a class="" href="{% url 'finadmin-edit' pk=account.pk %}"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp;
-        <a class="" href="{% url 'finadmin-delete' pk=account.pk %}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+        <a class="" href="{% url 'finadmin-edit' pk=account.pk ref_num=account.ref_num %}"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp;
+        <a class="" href="{% url 'finadmin-delete' pk=account.pk ref_num=account.ref_num %}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
       </td>
       {% comment %} {% endif %} {% endcomment %}
     </tr>

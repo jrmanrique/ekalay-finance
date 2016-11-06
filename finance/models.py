@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 
 
 # Create your models here.
@@ -29,10 +30,15 @@ class ChartOfAccounts(models.Model):
         return str(self.account_title)
 
     def get_absolute_url(self):
-        return reverse('account-edit', kwargs={'pk': self.pk})
+        kwargs = {
+            'pk' : self.pk,
+            'ref_num' : self.ref_num,
+        }
+        return reverse('account-edit', kwargs=kwargs)
 
 
 class CashInflow(models.Model):
+    slug = models.SlugField(default='', editable=False)
     date = models.DateField(default=datetime.now, blank=True)
     flow_type = models.CharField(max_length=100, verbose_name='Type', blank=True)
     ref_num = models.PositiveIntegerField(verbose_name='Reference Number', blank=True)
@@ -50,16 +56,25 @@ class CashInflow(models.Model):
     def __str__(self):
         return str(self.date) + ' ' + str(self.payor) + ' (PHP ' + str(self.amount) +')'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.ref_num = self.account_title.ref_num
         self.flow_type = self.account_title.account_type.account_type
-        super(CashInflow, self).save()
+        if self.document:
+            self.slug = slugify(self.ref_num) + '-' + slugify(self.document)
+        else:
+            self.slug = slugify(self.ref_num) + '-' + slugify(self.payor)
+        super(CashInflow, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('inflow-edit', kwargs={'pk' : self.pk})
+        kwargs = {
+            'pk' : self.pk,
+            'slug' : self.slug,
+        }
+        return reverse('inflow-edit', kwargs=kwargs)
 
 
 class CashOutflow(models.Model):
+    slug = models.SlugField(default='', editable=False)
     date = models.DateField(default=datetime.now, blank=True)
     flow_type = models.CharField(max_length=100, verbose_name='Type', blank=True)
     ref_num = models.PositiveIntegerField(verbose_name='Reference Number', blank=True)
@@ -78,10 +93,18 @@ class CashOutflow(models.Model):
     def __str__(self):
         return str(self.date) + ' ' + str(self.purpose) + ' (PHP ' + str(self.amount) +')'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.ref_num = self.account_title.ref_num
         self.flow_type = self.account_title.account_type.account_type
-        super(CashOutflow, self).save()
+        if self.document:
+            self.slug = slugify(self.ref_num) + '-' + slugify(self.document)
+        else:
+            self.slug = slugify(self.ref_num) + '-' + slugify(self.payee)
+        super(CashOutflow, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('outflow-edit', kwargs={'pk' : self.pk})
+        kwargs = {
+            'pk' : self.pk,
+            'slug' : self.slug,
+        }
+        return reverse('outflow-edit', kwargs=kwargs)
