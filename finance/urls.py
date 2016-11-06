@@ -4,8 +4,8 @@ from . import views
 
 urlpatterns = [
 #     /finance/
-    url(r'^$', views.view, name='index'),
-    url(r'^view/$', views.view, name='view'),
+    url(r'^$', views.index, name='index'),
+    url(r'^view/$', views.index, name='view'),
 #     url(r'^edit/$', views.edit, name='edit'),
 
 #     /finance/inflows/

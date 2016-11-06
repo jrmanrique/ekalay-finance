@@ -10,7 +10,7 @@ from .methods import *
 from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
 
 
-def view(request):
+def index(request):
     context = {
         'all_inflows': CashInflow.objects.all(),
         'all_outflows': CashOutflow.objects.all(),
@@ -24,7 +24,7 @@ def view(request):
         'balance': Decimal(balance).quantize(Decimal('.01')),
         'test_mode': test_mode,
     }
-    return render(request, 'finance/view.html', context)
+    return render(request, 'finance/index.html', context)
 
 
 def statement(request):
