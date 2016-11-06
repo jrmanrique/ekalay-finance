@@ -42,3 +42,10 @@ Thumbs.db
 *.pot
 *.pyc
 __pycache__/
+
+# VSCode-specific #
+###################
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json

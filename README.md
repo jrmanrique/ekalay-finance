@@ -7,7 +7,7 @@ This is the eKalay Finance Module Test project.
 2. The website will be live at https://ekalay-finance-jrmanrique.codeanyapp.com/.
 
 ### Option 2
-1. To open terminal, right click the ekalay-finance tab at the left side of the interface then choose SSH Terminal.
+1. Open the terminal: right click the ekalay-finance tab at the left side of the interface then choose SSH Terminal.
 2. Run this command on the terminal: ```$ python3 manage.py runserver 0.0.0.0:3000```
 3. The website will be live at https://ekalay-finance-jrmanrique.codeanyapp.com/.
 
