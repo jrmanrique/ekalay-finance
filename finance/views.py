@@ -211,7 +211,7 @@ class FlowAdd(TemplateView):
 
 class InflowCreate(CreateView):
     form_class = CashInflowForm
-    template_name = 'finance/generic-form.html'
+    template_name = 'finance/add.html'
 
     def form_valid(self, form):
         form.save()
@@ -223,7 +223,7 @@ class InflowCreate(CreateView):
         form = self.form_class()
         pageTitle = 'Add Cash Inflow'
         context = {
-            'form': form,
+            'aform': form,
             'pageTitle': pageTitle,
             'back': 'view',
         }
@@ -247,7 +247,7 @@ class InflowCreate(CreateView):
 class InflowEdit(UpdateView):
     model = CashInflow
     form_class = CashInflowForm
-    template_name = 'finance/generic-form.html'
+    template_name = 'finance/add.html'
 
     def get(self, request, **kwargs):
         self.object = self.model.objects.get(pk=self.kwargs['pk'])
@@ -271,7 +271,7 @@ class InflowEdit(UpdateView):
         form = self.form_class(instance=self.get_object(self))
         pageTitle = 'Edit Cash Inflow'
         context = {
-            'form': form,
+            'aform': form,
             'pageTitle': pageTitle,
             'back': 'view',
         }
@@ -313,7 +313,7 @@ class InflowDelete(DeleteView):
 
 class OutflowCreate(CreateView):
     form_class = CashOutflowForm
-    template_name = 'finance/generic-form.html'
+    template_name = 'finance/add.html'
 
     def form_valid(self, form):
         form.save()
@@ -325,7 +325,7 @@ class OutflowCreate(CreateView):
         form = self.form_class()
         pageTitle = 'Add Cash Outflow'
         context = {
-            'form': form,
+            'bform': form,
             'pageTitle': pageTitle,
             'back': 'view',
         }
@@ -335,7 +335,7 @@ class OutflowCreate(CreateView):
 class OutflowEdit(UpdateView):
     model = CashOutflow
     form_class = CashOutflowForm
-    template_name = 'finance/generic-form.html'
+    template_name = 'finance/add.html'
 
     def get(self, request, **kwargs):
         self.object = self.model.objects.get(pk=self.kwargs['pk'])
@@ -359,7 +359,7 @@ class OutflowEdit(UpdateView):
         form = self.form_class(instance=self.get_object(self))
         pageTitle = 'Edit Cash Outflow'
         context = {
-            'form': form,
+            'bform': form,
             'pageTitle': pageTitle,
             'back': 'view',
         }
