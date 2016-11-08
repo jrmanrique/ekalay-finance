@@ -1,4 +1,4 @@
-from calendar import monthrange, month_name # Currently unused.
+from calendar import month_name, monthrange  # Currently unused.
 
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
@@ -8,7 +8,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .forms import CashInflowForm, CashOutflowForm, ChartOfAccountsForm
 from .functions import *
-from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
+from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 
 
 def index(request):

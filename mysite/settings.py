@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Third Party Dependencies
     'mathfilters',
     'crispy_forms',
+    'rest_framework',
     # Apps and Custom Files
     'finance.apps.FinanceConfig',
     'finance.templatetags.filters',

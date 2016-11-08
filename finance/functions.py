@@ -4,8 +4,7 @@ from decimal import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 
-from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
-
+from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 
 # Global Variables
 

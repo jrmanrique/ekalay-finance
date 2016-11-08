@@ -1,9 +1,7 @@
 from crispy_forms.bootstrap import FormActions, PrependedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Fieldset, HTML, Layout, Reset, Submit
-
+from crispy_forms.layout import HTML, Fieldset, Layout, Reset, Submit
 from django import forms
-from django.core.urlresolvers import reverse
 
 from .models import CashInflow, CashOutflow, ChartOfAccounts
 
