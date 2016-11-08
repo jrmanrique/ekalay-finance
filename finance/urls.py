@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^view/$', views.index, name='view'),
     url(r'^add/$', views.FlowAdd.as_view(), name='add'),
+    url(r'^reload/$', views.reload_db, name='reload'),
 
     # /finance/inflows/
     url(r'^inflows/edit/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.InflowEdit.as_view(), name='inflow-edit'),

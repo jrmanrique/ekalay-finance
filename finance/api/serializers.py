@@ -14,4 +14,4 @@ class CashInflowCreateSerializer(ModelSerializer):
 
     class Meta:
         model = CashInflow
-        fields = ['date', 'account_title', 'payor', 'amount', 'document', 'notes']
+        fields = ['date', 'ref_num', 'payor', 'amount', 'document', 'notes']

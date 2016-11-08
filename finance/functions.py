@@ -29,6 +29,17 @@ def toggle_monthed():
     return monthed
 
 
+def reload_database():
+    " Reloads the database after modifying models.py "
+    all_outflows = CashOutflow.objects.all()
+    for outflow in all_outflows:
+        outflow.save()
+    all_inflows = CashInflow.objects.all()
+    for inflow in all_inflows:
+        inflow.save()
+    return True
+
+
 def convert_none(value):
     " Convert Nonetype to 0 "
     if value.get('amount__sum') is None:

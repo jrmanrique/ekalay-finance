@@ -46,8 +46,13 @@ def statement(request):
 
 
 def statement_toggle_view(request):
-    toggl()
+    toggle_monthed()
     return redirect('statement')
+
+
+def reload_db(request):
+    reload_database()
+    return redirect('view')
 
 
 class FinAdmin(CreateView):
