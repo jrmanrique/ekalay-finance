@@ -23,14 +23,14 @@ in_bank = 99510.20
 # Methods
 
 
-def toggleMonthedMethod():
+def toggle_monthed():
     " Toggle state of boolean monthed "
     global monthed
     monthed = not monthed
     return monthed
 
 
-def convertNone(value):
+def convert_none(value):
     " Convert Nonetype to 0 "
     if value.get('amount__sum') is None:
         return Decimal(0).quantize(Decimal('.01'))
@@ -38,7 +38,7 @@ def convertNone(value):
         return Decimal(value.get('amount__sum')).quantize(Decimal('.01'))
 
 
-def getField(num, field='account_title'):
+def get_field(num, field='account_title'):
     " Get field from ref_num in models.ChartOfAccounts "
     try:
         field = ChartOfAccounts.objects.values().get(ref_num=num).get(field)
@@ -47,7 +47,7 @@ def getField(num, field='account_title'):
     return field
 
 
-def getType(num):
+def get_type(num):
     " Get account_type from ref_num in models.ChartOfAccounts "
     try:
         field_id = ChartOfAccounts.objects.values().get(ref_num=num).get('account_type_id')
@@ -57,69 +57,69 @@ def getType(num):
     return field
 
 
-def sumFlow(model, monthed=True):
+def sum_flow(model, monthed=True):
     " Get sum of amount in model "
     if monthed:
         now = datetime.now()
         sum = model.objects.filter(date__month=month).aggregate(Sum('amount'))
     else:
         sum = model.objects.all().aggregate(Sum('amount'))
-    return convertNone(sum)
+    return convert_none(sum)
 
 
-def sumTypeInflow(account_type, monthed=True):
+def sum_type_inflow(account_type, monthed=True):
     " Get sum of amount of flow_type in models.CashInflow "
     if monthed:
         now = datetime.now()
         inflow = CashInflow.objects.filter(date__month=month, flow_type=account_type).aggregate(Sum('amount'))
     else:
         inflow = CashInflow.objects.filter(flow_type=account_type).aggregate(Sum('amount'))
-    return convertNone(inflow)
+    return convert_none(inflow)
 
 
-def sumTypeOutflow(account_type, monthed=True):
+def sum_type_outflow(account_type, monthed=True):
     " Get sum of amount of flow_type in models.CashOutflow "
     if monthed:
         now = datetime.now()
         outflow = CashOutflow.objects.filter(date__month=month, flow_type=account_type).aggregate(Sum('amount'))
     else:
         outflow = CashOutflow.objects.filter(flow_type=account_type).aggregate(Sum('amount'))
-    return convertNone(outflow)
+    return convert_none(outflow)
 
 
-def sumTypeNet(account_type, monthed):
+def sum_type_net(account_type, monthed=True):
     " Get sum of amount of flow_type in model "
-    net_sum = sumTypeInflow(account_type, monthed)-sumTypeOutflow(account_type, monthed)
+    net_sum = sum_type_inflow(account_type, monthed)-sum_type_outflow(account_type, monthed)
     return net_sum
 
 
-def sumRefnumInflow(num, monthed=True):
+def sum_refnum_inflow(num, monthed=True):
     " Get sum of amount of ref_num in models.CashInflow "
     if monthed:
         now = datetime.now()
         inflow = CashInflow.objects.filter(date__month=month, ref_num=num).aggregate(Sum('amount'))
     else:
         inflow = CashInflow.objects.filter(ref_num=num).aggregate(Sum('amount'))
-    return convertNone(inflow)
+    return convert_none(inflow)
 
 
-def sumRefnumOutflow(num, monthed=True):
+def sum_refnum_outflow(num, monthed=True):
     " Get sum of amount of ref_num in models.CashOutflow "
     if monthed:
         now = datetime.now()
         outflow = CashOutflow.objects.filter(date__month=month, ref_num=num).aggregate(Sum('amount'))
     else:
         outflow = CashOutflow.objects.filter(ref_num=num).aggregate(Sum('amount'))
-    return convertNone(outflow)
+    return convert_none(outflow)
 
 
-def sumRefnumNet(num, monthed):
+def sum_refnum_net(num, monthed):
     " Get sum of amount of ref_num in model "
-    sum = sumRefnumInflow(num, monthed)-sumRefnumOutflow(num, monthed)
+    sum = sum_refnum_inflow(num, monthed)-sum_refnum_outflow(num, monthed)
     return sum
 
 
-def listAccounts():
+def list_accounts():
     " List accounts with respective balances "
     account_list = []
     for account in ChartOfAccounts.objects.order_by('ref_num'):
@@ -127,27 +127,27 @@ def listAccounts():
         account_details['num'] = account.ref_num
         account_details['title'] = account.account_title
         account_details['type'] = str(account.account_type)
-        account_details['net'] = sumRefnumNet(account.ref_num, monthed)
-        account_details['inflow'] = sumRefnumInflow(account.ref_num, monthed)
-        account_details['outflow'] = sumRefnumOutflow(account.ref_num, monthed)
+        account_details['net'] = sum_refnum_net(account.ref_num, monthed)
+        account_details['inflow'] = sum_refnum_inflow(account.ref_num, monthed)
+        account_details['outflow'] = sum_refnum_outflow(account.ref_num, monthed)
         account_list.append(account_details)
     return account_list
 
 
-def listTypes():
+def list_types():
     " List account_types with respective balances "
     type_list = []
     for account_type in AccountTypes.objects.all():
         type_details = {}
         type_details['type'] = account_type.account_type
-        type_details['net'] = sumTypeNet(account_type, monthed)
-        type_details['inflow'] = sumTypeInflow(account_type, monthed)
-        type_details['outflow'] = sumTypeOutflow(account_type, monthed)
+        type_details['net'] = sum_type_net(account_type, monthed)
+        type_details['inflow'] = sum_type_inflow(account_type, monthed)
+        type_details['outflow'] = sum_type_outflow(account_type, monthed)
         type_list.append(type_details)
     return type_list
 
 
-def testLols(num):
-    " Test your shit "
+def test_function(num):
+    " Test your function "
     q = ChartOfAccounts.objects.filter(ref_num=num)
     return q

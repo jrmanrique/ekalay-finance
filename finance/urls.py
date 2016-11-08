@@ -11,16 +11,16 @@ urlpatterns = [
 #     /finance/inflows/
     url(r'^inflows/add/$', views.InflowCreate.as_view(), name='inflow-add'),
     url(r'^inflows/edit/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.InflowEdit.as_view(), name='inflow-edit'),
-    url(r'^inflows/delete/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.inflowDelete, name='inflow-delete'),
+    url(r'^inflows/delete/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.inflow_delete, name='inflow-delete'),
 
 #     /finance/outflows/
     url(r'^outflows/add/$', views.OutflowCreate.as_view(), name='outflow-add'),
     url(r'^outflows/edit/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.OutflowEdit.as_view(), name='outflow-edit'),
-    url(r'^outflows/delete/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.outflowDelete, name='outflow-delete'),
+    url(r'^outflows/delete/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.outflow_delete, name='outflow-delete'),
 
 #     /finance/statements/
     url(r'^statement/$', views.statement, name='statement'),
-    url(r'^statement/toggle$', views.toggleMonthed, name='toggle-monthed'), # Currently not in use
+    url(r'^statement/toggle$', views.statement_toggle_view, name='toggle-monthed'), # Currently not in use
 
 #     /finance/admin/
     url(r'^admin/$', views.FinAdmin.as_view(), name='finadmin'),

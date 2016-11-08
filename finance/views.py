@@ -16,12 +16,12 @@ def index(request):
         'all_inflows': CashInflow.objects.all(),
         'all_outflows': CashOutflow.objects.all(),
         'all_accounts': ChartOfAccounts.objects.all(),
-        'total_inflow': sumFlow(CashInflow, monthed),
-        'total_outflow': sumFlow(CashOutflow, monthed),
-        'title': getField(num),
-        'total_title': sumRefnumNet(num, monthed),
-        'type': getType(num),
-        'total_type': sumTypeNet(getType(num), monthed),
+        'total_inflow': sum_flow(CashInflow, monthed),
+        'total_outflow': sum_flow(CashOutflow, monthed),
+        'title': get_field(num),
+        'total_title': sum_refnum_net(num, monthed),
+        'type': get_type(num),
+        'total_type': sum_type_net(get_type(num), monthed),
         'balance': Decimal(balance).quantize(Decimal('.01')),
         'test_mode': test_mode,
         'test' : now,
@@ -35,38 +35,19 @@ def statement(request):
         'all_outflows': CashOutflow.objects.all(),
         'all_accounts': ChartOfAccounts.objects.all(),
         'all_account_types': AccountTypes.objects.all(),
-        'total_inflow': sumFlow(CashInflow, monthed),
-        'total_outflow': sumFlow(CashOutflow, monthed),
-        'list_accounts': listAccounts(),
-        'list_types': listTypes(),
+        'total_inflow': sum_flow(CashInflow, monthed),
+        'total_outflow': sum_flow(CashOutflow, monthed),
+        'list_accounts': list_accounts(),
+        'list_types': list_types(),
         'balance': Decimal(balance).quantize(Decimal('.01')),
         'in_bank': Decimal(in_bank).quantize(Decimal('.01')),
     }
     return render(request, 'finance/statement.html', context)
 
 
-def toggleMonthed(request):
-    toggleMonthedMethod()
+def statement_toggle_view(request):
+    toggle_monthed()
     return redirect('statement')
-
-
-def finAdmin(request):
-    messages.warning(request, "Make sure you know what you are doing.")
-    if request.method == "POST":
-        form = ChartOfAccountsForm(request.POST)
-        if form.is_valid():
-            account = form.save(commit=False)
-            account.save()
-            messages.success(request, "This account has been added.")
-    else:
-        form = ChartOfAccountsForm()
-    context = {
-        'form': form,
-        'all_accounts': ChartOfAccounts.objects.all(),
-        'all_account_types': AccountTypes.objects.all(),
-        'back': 'finadmin',
-    }
-    return render(request, 'finance/fin-admin.html', context)
 
 
 class FinAdmin(CreateView):
@@ -278,7 +259,7 @@ class InflowEdit(UpdateView):
         return context
 
 
-def inflowDelete(request, pk, slug):
+def inflow_delete(request, pk, slug):
     if request.method == 'POST':
         inflow = get_object_or_404(CashInflow, pk=pk)
         inflow.delete()
@@ -368,7 +349,7 @@ class OutflowEdit(UpdateView):
         return context
 
 
-def outflowDelete(request, pk, slug):
+def outflow_delete(request, pk, slug):
     if request.method == 'POST':
         outflow = get_object_or_404(CashInflow, pk=pk)
         outflow.delete()
