@@ -7,7 +7,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .forms import CashInflowForm, CashOutflowForm, ChartOfAccountsForm
-from .methods import *
+from .functions import *
 from .models import CashInflow, CashOutflow, ChartOfAccounts, AccountTypes
 
 
@@ -16,12 +16,12 @@ def index(request):
         'all_inflows': CashInflow.objects.all(),
         'all_outflows': CashOutflow.objects.all(),
         'all_accounts': ChartOfAccounts.objects.all(),
-        'total_inflow': sum_flow(CashInflow, monthed),
-        'total_outflow': sum_flow(CashOutflow, monthed),
+        'total_inflow': sum_flow(CashInflow),
+        'total_outflow': sum_flow(CashOutflow),
         'title': get_field(num),
-        'total_title': sum_refnum_net(num, monthed),
+        'total_title': sum_refnum_net(num),
         'type': get_type(num),
-        'total_type': sum_type_net(get_type(num), monthed),
+        'total_type': sum_type_net(get_type(num)),
         'balance': Decimal(balance).quantize(Decimal('.01')),
         'test_mode': test_mode,
         'test' : now,
@@ -35,8 +35,8 @@ def statement(request):
         'all_outflows': CashOutflow.objects.all(),
         'all_accounts': ChartOfAccounts.objects.all(),
         'all_account_types': AccountTypes.objects.all(),
-        'total_inflow': sum_flow(CashInflow, monthed),
-        'total_outflow': sum_flow(CashOutflow, monthed),
+        'total_inflow': sum_flow(CashInflow),
+        'total_outflow': sum_flow(CashOutflow),
         'list_accounts': list_accounts(),
         'list_types': list_types(),
         'balance': Decimal(balance).quantize(Decimal('.01')),
@@ -46,7 +46,7 @@ def statement(request):
 
 
 def statement_toggle_view(request):
-    toggle_monthed()
+    toggl()
     return redirect('statement')
 
 
