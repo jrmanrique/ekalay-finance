@@ -22,13 +22,3 @@
   {% endwith %}
   <!-- End Definition -->
 </div>
-
-{% comment %}{% if user.is_authenticated %}{% endcomment %}
-<hr/>
-<div class="row text-left pull-right">
-  <a class="btn btn-primary" href="{% url 'inflow-add' %}" role="button">
-    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> &nbsp; Add Inflow</a>
-  <a class="btn btn-primary" href="{% url 'outflow-add' %}" role="button">
-    <span class="glyphicon glyphicon-open" aria-hidden="true"></span> &nbsp; Add Outflow</a>
-</div>
-{% comment %}{% endif %}{% endcomment %}

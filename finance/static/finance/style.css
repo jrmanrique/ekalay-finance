@@ -20,3 +20,7 @@
     text-align: right;
     margin: 0px;
 }
+
+.asteriskField {
+    display: none;
+}

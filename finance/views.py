@@ -154,7 +154,7 @@ class FlowAdd(TemplateView):
         context = {
             'back': 'view',
             'aform': CashInflowForm(prefix='aform_pre'),
-            'bform': CashOutflowForm(prefix='bform_pre')
+            'bform': CashOutflowForm(prefix='bform_pre'),
         }
         # return render(request, template_name, context)
         return self.render_to_response(context)
@@ -174,6 +174,7 @@ class FlowAdd(TemplateView):
             'back': 'view',
             'aform': aform,
             'bform': bform,
+            'cform' : CashInflowForm,
         }
         # return render(request, template_name, context)
         return self.render_to_response(context)
@@ -190,25 +191,25 @@ class FlowAdd(TemplateView):
 #     return render(request, 'finance/inflow-form.html', {'form': form})
 
 
-class InflowCreate(CreateView):
-    form_class = CashInflowForm
-    template_name = 'finance/generic-form.html'
+# class InflowCreate(CreateView):
+#     form_class = CashInflowForm
+#     template_name = 'finance/generic-form.html'
 
-    def form_valid(self, form):
-        form.save()
-        messages.success(self.request, "This transaction has been recorded.")
-        return render(self.request, 'finance/generic-form.html', self.get_context_data())
+#     def form_valid(self, form):
+#         form.save()
+#         messages.success(self.request, "This transaction has been recorded.")
+#         return render(self.request, 'finance/generic-form.html', self.get_context_data())
 
-    def get_context_data(self, **kwargs):
-        context = super(InflowCreate, self).get_context_data(**kwargs)
-        form = self.form_class()
-        pageTitle = 'Add Cash Inflow'
-        context = {
-            'form': form,
-            'pageTitle': pageTitle,
-            'back': 'view',
-        }
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(InflowCreate, self).get_context_data(**kwargs)
+#         form = self.form_class()
+#         pageTitle = 'Add Cash Inflow'
+#         context = {
+#             'form': form,
+#             'pageTitle': pageTitle,
+#             'back': 'view',
+#         }
+#         return context
 
 
 # def inflowEdit(request, pk):
@@ -292,27 +293,6 @@ def inflow_delete(request, pk, slug):
 #             'back': 'view',
 #         }
 #         return context
-
-
-class OutflowCreate(CreateView):
-    form_class = CashOutflowForm
-    template_name = 'finance/generic-form.html'
-
-    def form_valid(self, form):
-        form.save()
-        messages.success(self.request, "This transaction has been recorded.")
-        return render(self.request, 'finance/generic-form.html', self.get_context_data())
-
-    def get_context_data(self, **kwargs):
-        context = super(OutflowCreate, self).get_context_data(**kwargs)
-        form = self.form_class()
-        pageTitle = 'Add Cash Outflow'
-        context = {
-            'aform': form,
-            'pageTitle': pageTitle,
-            'back': 'view',
-        }
-        return context
 
 
 class OutflowEdit(UpdateView):

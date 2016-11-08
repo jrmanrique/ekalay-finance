@@ -9,12 +9,10 @@ urlpatterns = [
     url(r'^add/$', views.FlowAdd.as_view(), name='add'),
 
 #     /finance/inflows/
-    url(r'^inflows/add/$', views.InflowCreate.as_view(), name='inflow-add'),
     url(r'^inflows/edit/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.InflowEdit.as_view(), name='inflow-edit'),
     url(r'^inflows/delete/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.inflow_delete, name='inflow-delete'),
 
 #     /finance/outflows/
-    url(r'^outflows/add/$', views.OutflowCreate.as_view(), name='outflow-add'),
     url(r'^outflows/edit/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.OutflowEdit.as_view(), name='outflow-edit'),
     url(r'^outflows/delete/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.outflow_delete, name='outflow-delete'),
 

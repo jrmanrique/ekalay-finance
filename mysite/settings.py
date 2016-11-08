@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    # Native Django Dependencies
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,9 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    # Third Party Dependencies
+    'mathfilters',
+    'crispy_forms',
+    # Apps and Custom Files
     'finance.apps.FinanceConfig',
     'finance.templatetags.filters',
-    'mathfilters',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +129,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# django-crispy-forms
+# https://django-crispy-forms.readthedocs.io/
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+CRISPY_FAIL_SILENTLY = not DEBUG
