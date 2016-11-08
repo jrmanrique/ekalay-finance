@@ -1,6 +1,5 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from finance.models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 from .serializers import CashInflowSerializer, CashInflowCreateSerializer
