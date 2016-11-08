@@ -76,7 +76,7 @@ def sum_type(model, account_type):
 
 
 def sum_type_net(account_type):
-    " Get sum of amount of flow_type in model "
+    " Get net sum of amount of flow_type "
     net_sum = sum_type(CashInflow, account_type) - sum_type(CashOutflow,account_type)
     return net_sum
 
@@ -91,7 +91,7 @@ def sum_refnum(model, num):
 
 
 def sum_refnum_net(num):
-    " Get sum of amount of ref_num in model "
+    " Get net sum of amount of ref_num "
     sum = sum_refnum(CashInflow, num)-sum_refnum(CashOutflow, num)
     return sum
 

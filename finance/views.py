@@ -18,12 +18,12 @@ def index(request):
         'all_accounts': ChartOfAccounts.objects.all(),
         'total_inflow': sum_flow(CashInflow),
         'total_outflow': sum_flow(CashOutflow),
+        'balance': Decimal(balance).quantize(Decimal('.01')),
+        'test_mode': test_mode,
         'title': get_field(num),
         'total_title': sum_refnum_net(num),
         'type': get_type(num),
         'total_type': sum_type_net(get_type(num)),
-        'balance': Decimal(balance).quantize(Decimal('.01')),
-        'test_mode': test_mode,
         'test' : now,
     }
     return render(request, 'finance/index.html', context)
