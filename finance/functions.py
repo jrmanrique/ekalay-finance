@@ -77,7 +77,6 @@ def sum_type(model, account_type):
 
 def sum_type_net(account_type):
     " Get sum of amount of flow_type in model "
-    # net_sum = sum_type_inflow(account_type)-sum_type_outflow(account_type)
     net_sum = sum_type(CashInflow, account_type) - sum_type(CashOutflow,account_type)
     return net_sum
 
