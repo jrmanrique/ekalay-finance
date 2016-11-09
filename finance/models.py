@@ -32,8 +32,8 @@ class ChartOfAccounts(models.Model):
 
     def get_absolute_url(self):
         kwargs = {
-            'pk' : self.pk,
-            'ref_num' : self.ref_num,
+            'pk': self.pk,
+            'ref_num': self.ref_num,
         }
         return reverse('account-edit', kwargs=kwargs)
 
@@ -68,8 +68,8 @@ class CashInflow(models.Model):
 
     def get_absolute_url(self):
         kwargs = {
-            'pk' : self.pk,
-            'slug' : self.slug,
+            'pk': self.pk,
+            'slug': self.slug,
         }
         return reverse('inflow-edit', kwargs=kwargs)
 
@@ -105,7 +105,7 @@ class CashOutflow(models.Model):
 
     def get_absolute_url(self):
         kwargs = {
-            'pk' : self.pk,
-            'slug' : self.slug,
+            'pk': self.pk,
+            'slug': self.slug,
         }
         return reverse('outflow-edit', kwargs=kwargs)

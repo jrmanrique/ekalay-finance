@@ -27,7 +27,7 @@ def index(request):
         'total_title': sum_refnum_net(num),
         'type': get_type(num),
         'total_type': sum_type_net(get_type(num)),
-        'test' : '',
+        'test': '',
     }
     return render(request, 'finance/index.html', context)
 
@@ -183,7 +183,6 @@ class FlowAdd(TemplateView):
             'back': 'view',
             'aform': aform,
             'bform': bform,
-            'cform' : CashInflowForm,
         }
         # return render(request, template_name, context)
         return self.render_to_response(context)

@@ -10,7 +10,7 @@ from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 # Global Variables
 
 
-now = datetime.now() # Do not change. Currently unused.
+now = datetime.now()  # Do not change. Currently unused.
 monthed = False
 test_mode = False
 
@@ -133,7 +133,7 @@ def sum_type(model, account_type):
 
 def sum_type_net(account_type):
     " Get net sum of amount of flow_type "
-    net_sum = sum_type(CashInflow, account_type) - sum_type(CashOutflow,account_type)
+    net_sum = sum_type(CashInflow, account_type) - sum_type(CashOutflow, account_type)
     return net_sum
 
 
