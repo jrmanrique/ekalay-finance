@@ -11,6 +11,7 @@
   <title>{% block title %}eKalay{% endblock %}</title>
 
   {% load staticfiles %}
+  {% load filters %}
 
   <!-- Bootstrap Core CSS -->
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
@@ -64,7 +65,7 @@
       <ul class="nav navbar-top-links navbar-right">
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="fa fa-user" aria-hidden="true"></i> User <i class="fa fa-caret-down"></i>
+            <i class="fa fa-user" aria-hidden="true"></i> {{ user.get_username }} <i class="fa fa-caret-down"></i>
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -83,10 +84,6 @@
       <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
           <div class="menu_section">
-            <!--                         <br />
-                        <b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; General</b>
-                        <br />
-                        <br /> -->
             <ul class="nav" id="side-menu">
               <li>
                 <a href="javascript:void(0)"><i class="fa fa-home" aria-hidden="true"></i> Dashboard</a>
@@ -106,14 +103,6 @@
               <li>
                 <a href="javascript:void(0)"><i class="fa fa-money" aria-hidden="true"></i> Billing</a>
               </li>
-              <!--                         </ul>
-                    </div>
-                    <div class="menu_section">
-                        <br />
-                        <b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Council Apps</b>
-                        <br />
-                        <br />
-                        <ul class="nav" id="side-menu"> -->
               <li>
                 <a href="javascript:void(0)"><i class="fa fa-group" aria-hidden="true"></i> Grievance Form</a>
               </li>
@@ -126,18 +115,18 @@
               <li>
                 <a href="javascript:void(0)"><i class="fa fa-money" aria-hidden="true"></i> Finance Accounting<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                  <li>
+                  {% if request.user|has_group:'Council' or user.is_superuser %}<li>
                     <a href="{% url 'view' %}">View Cash Flows</a>
-                  </li>
-                  <li>
+                  </li>{% endif %}
+                  {% if request.user|has_group:'Finance' or user.is_superuser %}<li>
                     <a href="{% url 'add' %}">Add Cash Flows</a>
-                  </li>
+                  </li>{% endif %}
                   <li>
                     <a href="{% url 'statement' %}">Statement of Cash Flows</a>
                   </li>
-                  <li>
+                  {% if request.user|has_group:'Finance' or user.is_superuser %}<li>
                     <a href="{% url 'finadmin' %}">Administrative Access</a>
-                  </li>
+                  </li>{% endif %}
                 </ul>
               </li>
             </ul>

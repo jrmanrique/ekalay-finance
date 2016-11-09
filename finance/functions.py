@@ -1,6 +1,7 @@
 from datetime import *
 from decimal import *
 
+from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 
@@ -38,6 +39,51 @@ def reload_database():
     for inflow in all_inflows:
         inflow.save()
     return True
+
+
+def is_super(user):
+    " Check user access level "
+    users_in_council = Group.objects.get(name="Council").user_set.all()
+    users_in_finance = Group.objects.get(name="Finance").user_set.all()
+    if user.is_superuser:
+        access = True
+    elif user in users_in_finance:
+        access = False
+    elif user in users_in_council:
+        access = False
+    else:
+        access = False
+    return access
+
+
+def is_finance(user):
+    " Check user access level "
+    users_in_council = Group.objects.get(name="Council").user_set.all()
+    users_in_finance = Group.objects.get(name="Finance").user_set.all()
+    if user.is_superuser:
+        access = True
+    elif user in users_in_finance:
+        access = True
+    elif user in users_in_council:
+        access = False
+    else:
+        access = False
+    return access
+
+
+def is_council(user):
+    " Check user access level "
+    users_in_council = Group.objects.get(name="Council").user_set.all()
+    users_in_finance = Group.objects.get(name="Finance").user_set.all()
+    if user.is_superuser:
+        access = True
+    elif user in users_in_finance:
+        access = True
+    elif user in users_in_council:
+        access = True
+    else:
+        access = False
+    return access
 
 
 def convert_none(value):

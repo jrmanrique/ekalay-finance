@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # Apps and Custom Files
     'finance.apps.FinanceConfig',
+    'finance.templatetags'
 ]
 
 MIDDLEWARE = [

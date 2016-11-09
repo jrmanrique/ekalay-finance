@@ -1,5 +1,6 @@
 {% load humanize %}
 {% load mathfilters %}
+{% load filters %}
 
 <table width="100%" class="table table-striped table-hover" id="dataTables-in">
   <thead>
@@ -58,8 +59,8 @@
         </div>
         <!-- /.modal -->
 
+        {% if request.user|has_group:'Finance' or user.is_superuser %}
         <a class="" href="{% url 'inflow-edit' pk=inflow.pk slug=inflow.slug %}"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" data-placement="bottom" title="Edit"></span></a>        &nbsp;
-        {% comment %}{% if user.is_superuser %}{% endcomment %}
         <a data-toggle="modal" data-target="#deleteModal{{ inflow.pk }}" data-toggle="tooltip" data-placement="bottom" title="Delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a> &nbsp;
 
         <div class="modal fade" id="deleteModal{{ inflow.pk }}" tabindex="-1" role="dialog" aria-labelledby="#deleteModalLabel{{ inflow.pk }}"
@@ -95,7 +96,7 @@
           <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
-        {% comment %}{% endif %}{% endcomment %}
+        {% endif %}
       </td>
     </tr>
     {% endfor %}

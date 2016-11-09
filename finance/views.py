@@ -1,8 +1,10 @@
 from calendar import month_name, monthrange  # Currently unused.
 
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
@@ -11,6 +13,7 @@ from .functions import *
 from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 
 
+@user_passes_test(is_council)
 def index(request):
     context = {
         'all_inflows': CashInflow.objects.all(),
@@ -24,11 +27,12 @@ def index(request):
         'total_title': sum_refnum_net(num),
         'type': get_type(num),
         'total_type': sum_type_net(get_type(num)),
-        'test' : now,
+        'test' : '',
     }
     return render(request, 'finance/index.html', context)
 
 
+@user_passes_test(is_council)
 def statement(request):
     context = {
         'all_inflows': CashInflow.objects.all(),
@@ -45,16 +49,13 @@ def statement(request):
     return render(request, 'finance/statement.html', context)
 
 
+@user_passes_test(is_finance)
 def statement_toggle_view(request):
     toggle_monthed()
     return redirect('statement')
 
 
-def reload_db(request):
-    reload_database()
-    return redirect('view')
-
-
+@method_decorator(user_passes_test(is_finance), name='dispatch')
 class FinAdmin(CreateView):
     form_class = ChartOfAccountsForm
     template_name = 'finance/fin-admin.html'
@@ -80,6 +81,7 @@ class FinAdmin(CreateView):
         return context
 
 
+@method_decorator(user_passes_test(is_finance), name='dispatch')
 class FinAdminEdit(UpdateView):
     edit_mode = True
     model = ChartOfAccounts
@@ -114,6 +116,7 @@ class FinAdminEdit(UpdateView):
         return context
 
 
+@method_decorator(user_passes_test(is_finance), name='dispatch')
 class FinAdminDelete(DeleteView):
     edit_mode = True
     delete_mode = True
@@ -152,6 +155,7 @@ def _get_form(request, formcls, prefix):
     return formcls(data, prefix=prefix)
 
 
+@method_decorator(user_passes_test(is_finance), name='dispatch')
 class FlowAdd(TemplateView):
     template_name = 'finance/add.html'
 
@@ -231,6 +235,7 @@ class FlowAdd(TemplateView):
 #     return render(request, 'finance/inflow-form.html', {'form': form})
 
 
+@method_decorator(user_passes_test(is_finance), name='dispatch')
 class InflowEdit(UpdateView):
     model = CashInflow
     form_class = CashInflowForm
@@ -265,6 +270,7 @@ class InflowEdit(UpdateView):
         return context
 
 
+@user_passes_test(is_finance)
 def inflow_delete(request, pk, slug):
     if request.method == 'POST':
         inflow = get_object_or_404(CashInflow, pk=pk)
@@ -300,6 +306,7 @@ def inflow_delete(request, pk, slug):
 #         return context
 
 
+@method_decorator(user_passes_test(is_finance), name='dispatch')
 class OutflowEdit(UpdateView):
     model = CashOutflow
     form_class = CashOutflowForm
@@ -334,10 +341,17 @@ class OutflowEdit(UpdateView):
         return context
 
 
+@user_passes_test(is_finance)
 def outflow_delete(request, pk, slug):
     if request.method == 'POST':
         outflow = get_object_or_404(CashInflow, pk=pk)
         outflow.delete()
         messages.success(request, "The transaction has been deleted successfully.")
     # outflows = outflow.objects.filter(user=request.user)
+    return redirect('view')
+
+
+@user_passes_test(is_super)
+def reload_db(request):
+    reload_database()
     return redirect('view')
