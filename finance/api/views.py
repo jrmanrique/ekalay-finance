@@ -1,6 +1,9 @@
 from django.contrib.auth.models import Group
+from django.db.models import Q
 from rest_framework import generics, permissions, status
-from rest_framework.response import Response
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response  # Currently not in use.
 
 from finance.models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 from .serializers import CashInflowSerializer, CashInflowCreateSerializer
@@ -40,13 +43,41 @@ class IsElevatedAdminUser(permissions.BasePermission):
             return False
 
 
+# Custom Pagination
+
+
+class FlowPageNumberPagination(PageNumberPagination):
+    page_size = 3
+
+
 # Views
 
 
 class CashInflowList(generics.ListAPIView):
-    queryset = CashInflow.objects.all()
     serializer_class = CashInflowSerializer
     permission_classes = [permissions.IsAdminUser]
+    filter_backends =  [SearchFilter, OrderingFilter]
+    search_fields = ['ref_num', 'account_title', 'flow_type', 'payor', 'document', 'notes']
+    pagination_class = FlowPageNumberPagination
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = CashInflow.objects.all()
+        query = self.request.GET.get("q")
+        if query:
+            try:
+                int(query)
+                queryset_list = queryset_list.filter(
+                    Q(ref_num__exact = query)
+                ).distinct()
+            except ValueError:
+                queryset_list = queryset_list.filter(
+                    Q(account_title__icontains = query) |
+                    Q(flow_type__icontains = query) |
+                    Q(payor__icontains = query) |
+                    Q(document__icontains = query) |
+                    Q(notes__icontains = query)
+                ).distinct()
+        return queryset_list
 
 
 class CashInflowCreate(generics.CreateAPIView):

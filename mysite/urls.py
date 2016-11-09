@@ -20,6 +20,6 @@ urlpatterns = [
     # url(r'^', include('finance.urls')),
     url(r'^admin/', admin.site.urls, name='admin'),
     url(r'^finance/', include('finance.urls')),
-    url(r'^api/finance/', include('finance.api.urls')),
+    url(r'^api/finance/', include('finance.api.urls', namespace='finance-api')),
     url(r'^api-auth/', include('rest_framework.urls')),
 ]

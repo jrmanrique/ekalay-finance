@@ -10,10 +10,10 @@ class CashInflowForm(forms.ModelForm):
 
     class Meta:
         model = CashInflow
-        fields = ['date', 'ref_num', 'payor', 'amount', 'document', 'notes']
+        fields = ['date', 'account_title', 'payor', 'amount', 'document', 'notes']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
-            'ref_num': forms.Select(),
+            'account_title': forms.Select(),
             'payor': forms.TextInput(),
             'amount': forms.NumberInput(),
             'document': forms.TextInput(),
@@ -24,8 +24,6 @@ class CashInflowForm(forms.ModelForm):
         super(CashInflowForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
 
-        self.fields['ref_num'].label = 'Account Title'
-
         self.helper.form_tag = False
         self.helper.disable_csrf = True
         self.helper.label_class = 'col-lg-2'
@@ -34,7 +32,7 @@ class CashInflowForm(forms.ModelForm):
             Fieldset(
                 '',
                 'date',
-                'ref_num',
+                'account_title',
                 'payor',
                 PrependedText('amount', 'PHP'),
                 'document',
@@ -52,10 +50,10 @@ class CashOutflowForm(forms.ModelForm):
 
     class Meta:
         model = CashOutflow
-        fields = ['date', 'ref_num', 'payee', 'purpose', 'amount', 'document', 'notes']
+        fields = ['date', 'account_title', 'payee', 'purpose', 'amount', 'document', 'notes']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
-            'ref_num': forms.Select(),
+            'account_title': forms.Select(),
             'payee': forms.TextInput(),
             'purpose': forms.TextInput(),
             'amount': forms.NumberInput(),
@@ -67,8 +65,6 @@ class CashOutflowForm(forms.ModelForm):
         super(CashOutflowForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
 
-        self.fields['ref_num'].label = 'Account Title'
-
         self.helper.form_tag = False
         self.helper.disable_csrf = True
         self.helper.label_class = 'col-lg-2'
@@ -77,7 +73,7 @@ class CashOutflowForm(forms.ModelForm):
             Fieldset(
                 '',
                 'date',
-                'ref_num',
+                'account_title',
                 'payee',
                 'purpose',
                 PrependedText('amount', 'PHP'),
