@@ -6,7 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response  # Currently not in use.
 
 from finance.models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
-from .serializers import CashInflowSerializer, CashInflowCreateSerializer
+from .serializers import CashInflowSerializer, CashInflowCreateSerializer, CashInflowEditSerializer
 
 
 # Custom Permissions
@@ -89,22 +89,13 @@ class CashInflowCreate(generics.CreateAPIView):
         serializer.save()
 
 
-class CashInflowDetail(generics.RetrieveAPIView):
+class CashInflowEdit(generics.RetrieveAPIView):
     queryset = CashInflow.objects.all()
-    serializer_class = CashInflowSerializer
-    permission_classes = [permissions.IsAdminUser]
-
-
-class CashInflowUpdate(generics.RetrieveUpdateAPIView):
-    queryset = CashInflow.objects.all()
-    serializer_class = CashInflowSerializer
+    serializer_class = CashInflowEditSerializer
     permission_classes = [IsElevatedAdminUser]
 
-    def perform_update(self, serializer):
-        serializer.save()
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
-
-class CashInflowDelete(generics.DestroyAPIView):
-    queryset = CashInflow.objects.all()
-    serializer_class = CashInflowSerializer
-    permission_classes = [IsElevatedAdminUser]
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
