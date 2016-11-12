@@ -19,7 +19,6 @@ urlpatterns = [
 
     # /finance/statements/
     url(r'^statement/$', views.statement, name='statement'),
-    url(r'^statement/toggle$', views.statement_toggle_view, name='toggle-monthed'),  # Currently not in use
 
     # /finance/admin/
     url(r'^admin/$', views.FinAdmin.as_view(), name='finadmin'),

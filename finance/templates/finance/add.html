@@ -8,9 +8,8 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs">
-  <li class="active"><a href="#inflows" data-toggle="tab">Cash Inflows</a>
-  </li>
-  <li><a href="#outflows" data-toggle="tab">Cash Outflows</a>
+  {% if mode != 'Outflow' %}<li class="active"><a href="#inflows" data-toggle="tab">Cash Inflows</a></li>{% endif %}
+  {% if mode != 'Inflow' %}<li><a href="#outflows" data-toggle="tab">Cash Outflows</a></li>{% endif %}
 </ul>
 
 <!-- Tab panes -->

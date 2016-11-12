@@ -1,33 +1,53 @@
-from datetime import *
+from datetime import datetime
 from decimal import *
 
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 
+from . import forms
 from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
+
 
 # Global Variables
 
 
-now = datetime.now()  # Do not change. Currently unused.
-monthed = False
-test_mode = False
+now = datetime.now()  # Defines current datetime. Do not change.
+from_date = datetime.strftime(now, "%Y-%m-01")
+to_date = datetime.strftime(now, "%Y-%m-%d")  # Default to_date if not set. Format: YYYY-MM-DD.
+balance = 124795.70  # Starting balance from implementation (2016-10-01).
 
-month = 11
+filtered = True  # If True, shows Statement data from from_date to to_date.
+test_mode = False  # Shows test values in Summary tab.
+
 num = 32
-balance = 124795.70
-in_bank = 99510.20
+in_bank = 99510.20  # Currently not in use.
 
 
 # Methods
 
 
-def toggle_monthed():
-    " Toggle state of boolean monthed "
-    global monthed
-    monthed = not monthed
-    return monthed
+def statement_filter(request):
+    " Set filters for Statement "
+    global from_date
+    global to_date
+    if request.method == "POST":
+        form = forms.StatementForm(request.POST)
+        from_date = form.data['from_date']
+        to_date = form.data['to_date']
+    else:
+        form = forms.StatementForm()
+    return form, from_date, to_date
+
+
+def parse_date(iso_date):
+    " Parse basic ISO 8601 date-only format into datetime.date format "
+    if isinstance(iso_date, str):
+        date_obj = datetime.strptime(iso_date, "%Y-%m-%d")
+    else:
+        date_obj = iso_date
+    parsed_date = datetime.strftime(date_obj,"%d %B %Y")
+    return parsed_date
 
 
 def reload_database():
@@ -113,10 +133,21 @@ def get_type(num):
     return field
 
 
+def get_balance():
+    " Get previous balance for filtering "
+    prev_inflow = CashInflow.objects.filter(date__lt=from_date).aggregate(Sum('amount'))
+    prev_outflow = CashOutflow.objects.filter(date__lt=from_date).aggregate(Sum('amount'))
+    if filtered:
+        filter_bal = Decimal(balance).quantize(Decimal('.01')) + convert_none(prev_inflow) - convert_none(prev_outflow)
+    else:
+        filter_bal = Decimal(balance).quantize(Decimal('.01'))
+    return filter_bal
+
+
 def sum_flow(model):
     " Get sum of amount in model "
-    if monthed:
-        sum = model.objects.filter(date__month=month).aggregate(Sum('amount'))
+    if filtered:
+        sum = model.objects.exclude(date__gt=to_date).filter(date__gte=from_date).aggregate(Sum('amount'))
     else:
         sum = model.objects.all().aggregate(Sum('amount'))
     return convert_none(sum)
@@ -124,8 +155,8 @@ def sum_flow(model):
 
 def sum_type(model, account_type):
     " Get sum of amount of flow_type in model "
-    if monthed:
-        flow = model.objects.filter(date__month=month, flow_type=account_type).aggregate(Sum('amount'))
+    if filtered:
+        flow = model.objects.exclude(date__gt=to_date).filter(date__gte=from_date, flow_type=account_type).aggregate(Sum('amount'))
     else:
         flow = model.objects.filter(flow_type=account_type).aggregate(Sum('amount'))
     return convert_none(flow)
@@ -139,8 +170,8 @@ def sum_type_net(account_type):
 
 def sum_refnum(model, num):
     " Get sum of amount of ref_num in model "
-    if monthed:
-        flow = model.objects.filter(date__month=month, ref_num=num).aggregate(Sum('amount'))
+    if filtered:
+        flow = model.objects.exclude(date__gt=to_date).filter(date__gte=from_date, ref_num=num).aggregate(Sum('amount'))
     else:
         flow = model.objects.filter(ref_num=num).aggregate(Sum('amount'))
     return convert_none(flow)
@@ -180,7 +211,12 @@ def list_types():
     return type_list
 
 
-def test_function(num):
+def test_function():
     " Test your function "
-    q = ChartOfAccounts.objects.filter(ref_num=num)
-    return q
+    prev_inflow = CashInflow.objects.filter(date__lte=from_date).aggregate(Sum('amount'))
+    prev_outflow = CashOutflow.objects.filter(date__lte=from_date).aggregate(Sum('amount'))
+    if filtered:
+        filter_bal = Decimal(balance).quantize(Decimal('.01')) + convert_none(prev_inflow) - convert_none(prev_outflow)
+    else:
+        filter_bal = Decimal(balance).quantize(Decimal('.01'))
+    return filter_bal

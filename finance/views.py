@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from .forms import CashInflowForm, CashOutflowForm, ChartOfAccountsForm
+from .forms import CashInflowForm, CashOutflowForm, ChartOfAccountsForm, StatementForm
 from .functions import *
 from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 
@@ -21,38 +21,32 @@ def index(request):
         'all_accounts': ChartOfAccounts.objects.all(),
         'total_inflow': sum_flow(CashInflow),
         'total_outflow': sum_flow(CashOutflow),
-        'balance': Decimal(balance).quantize(Decimal('.01')),
+        'balance': get_balance(),
         'test_mode': test_mode,
         'title': get_field(num),
         'total_title': sum_refnum_net(num),
         'type': get_type(num),
         'total_type': sum_type_net(get_type(num)),
-        'test': '',
+        'test': from_date,
     }
     return render(request, 'finance/index.html', context)
 
 
 @user_passes_test(is_council)
 def statement(request):
+    form, from_date, to_date = statement_filter(request)
     context = {
-        'all_inflows': CashInflow.objects.all(),
-        'all_outflows': CashOutflow.objects.all(),
-        'all_accounts': ChartOfAccounts.objects.all(),
-        'all_account_types': AccountTypes.objects.all(),
         'total_inflow': sum_flow(CashInflow),
         'total_outflow': sum_flow(CashOutflow),
         'list_accounts': list_accounts(),
         'list_types': list_types(),
-        'balance': Decimal(balance).quantize(Decimal('.01')),
+        'balance': get_balance(),
         'in_bank': Decimal(in_bank).quantize(Decimal('.01')),
+        'form': form,
+        'from': parse_date(from_date),
+        'to': parse_date(to_date),
     }
     return render(request, 'finance/statement.html', context)
-
-
-@user_passes_test(is_finance)
-def statement_toggle_view(request):
-    toggle_monthed()
-    return redirect('statement')
 
 
 @method_decorator(user_passes_test(is_finance), name='dispatch')
@@ -260,11 +254,12 @@ class InflowEdit(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(InflowEdit, self).get_context_data(**kwargs)
         form = self.form_class(instance=self.get_object(self))
-        pageTitle = 'Edit Cash Inflow'
+        model = 'Inflow'
         context = {
             'aform': form,
-            'pageTitle': pageTitle,
+            'bform': form,
             'back': 'view',
+            'mode': model,
         }
         return context
 
@@ -331,11 +326,12 @@ class OutflowEdit(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(OutflowEdit, self).get_context_data(**kwargs)
         form = self.form_class(instance=self.get_object(self))
-        pageTitle = 'Edit Cash Outflow'
+        model = 'Outflow'
         context = {
+            'aform': form,
             'bform': form,
-            'pageTitle': pageTitle,
             'back': 'view',
+            'mode': model,
         }
         return context
 

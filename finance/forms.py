@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from crispy_forms.bootstrap import FormActions, PrependedText
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Fieldset, Layout, Reset, Submit
+from crispy_forms.layout import HTML, Field, Fieldset, Layout, Reset, Submit
 from django import forms
 
+from . import functions
 from .models import CashInflow, CashOutflow, ChartOfAccounts
 
 
@@ -118,5 +121,33 @@ class ChartOfAccountsForm(forms.ModelForm):
                 Submit('bform_pre', 'Submit', css_class='btn btn-success'),
                 Reset('reset', 'Reset', css_class="btn btn-default"),
                 HTML("<a class=\"btn btn-default\" href=\"{% url back %}\" role=\"button\">Back</a>"),
+            )
+        )
+
+
+class StatementForm(forms.Form):
+    from_date = forms.DateField(initial=functions.from_date, widget=forms.DateInput(attrs={'type': 'date'}))
+    to_date = forms.DateField(initial=functions.to_date, widget=forms.DateInput(attrs={'type': 'date'}))
+
+    def __init__(self, *args, **kwargs):
+        super(StatementForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+        self.helper.form_action = 'statement'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'post'
+        self.helper.form_show_labels = False
+        self.helper.label_class = 'col-lg-0'
+        self.helper.field_class = 'col-lg-12'
+        self.helper.layout = Layout(
+            Fieldset(
+                '',
+                PrependedText('from_date', 'From'),
+                PrependedText('to_date', 'To'),
+            ),
+            FormActions(
+                Submit('', 'Filter', css_class='btn btn-success'),
+                Reset('reset', 'Reset', css_class="btn btn-default"),
+                HTML("<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>"),
             )
         )
