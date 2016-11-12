@@ -125,29 +125,18 @@ class ChartOfAccountsForm(forms.ModelForm):
         )
 
 
-class StatementForm(forms.Form):
-    from_date = forms.DateField(initial=functions.from_date, widget=forms.DateInput(attrs={'type': 'date'}))
-    to_date = forms.DateField(initial=functions.to_date, widget=forms.DateInput(attrs={'type': 'date'}))
+class StatementFilterForm(forms.Form):
+    month = forms.ChoiceField(initial=functions.choice, choices=functions.list_months)
 
     def __init__(self, *args, **kwargs):
-        super(StatementForm, self).__init__(*args, **kwargs)
+        super(StatementFilterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
 
         self.helper.form_action = 'statement'
-        self.helper.form_class = 'form-horizontal'
+        self.helper.form_class = 'form-inline'
         self.helper.form_method = 'post'
         self.helper.form_show_labels = False
-        self.helper.label_class = 'col-lg-0'
-        self.helper.field_class = 'col-lg-12'
         self.helper.layout = Layout(
-            Fieldset(
-                '',
-                PrependedText('from_date', 'From'),
-                PrependedText('to_date', 'To'),
-            ),
-            FormActions(
-                Submit('', 'Filter', css_class='btn btn-success'),
-                Reset('reset', 'Reset', css_class="btn btn-default"),
-                HTML("<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>"),
-            )
+            'month',
+            Submit('', 'Filter', css_class='btn btn-success'),
         )

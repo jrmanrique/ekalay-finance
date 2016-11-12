@@ -1,5 +1,3 @@
-from calendar import month_name, monthrange  # Currently unused.
-
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
@@ -8,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
-from .forms import CashInflowForm, CashOutflowForm, ChartOfAccountsForm, StatementForm
+from .forms import CashInflowForm, CashOutflowForm, ChartOfAccountsForm, StatementFilterForm
 from .functions import *
 from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 
@@ -27,22 +25,24 @@ def index(request):
         'total_title': sum_refnum_net(num),
         'type': get_type(num),
         'total_type': sum_type_net(get_type(num)),
-        'test': from_date,
+        'test': list_months(),
     }
     return render(request, 'finance/index.html', context)
 
 
 @user_passes_test(is_council)
 def statement(request):
-    form, from_date, to_date = statement_filter(request)
+    form, month, from_date, to_date = statement_filter(request)
     context = {
         'total_inflow': sum_flow(CashInflow),
         'total_outflow': sum_flow(CashOutflow),
         'list_accounts': list_accounts(),
         'list_types': list_types(),
+        'list_months': list_months(),
         'balance': get_balance(),
         'in_bank': Decimal(in_bank).quantize(Decimal('.01')),
         'form': form,
+        'month': month,
         'from': parse_date(from_date),
         'to': parse_date(to_date),
     }

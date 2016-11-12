@@ -1,4 +1,5 @@
-from datetime import datetime
+from calendar import monthrange
+from datetime import date, datetime
 from decimal import *
 
 from django.contrib.auth.models import Group
@@ -12,16 +13,17 @@ from .models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 # Global Variables
 
 
-now = datetime.now()  # Defines current datetime. Do not change.
-from_date = datetime.strftime(now, "%Y-%m-01")
-to_date = datetime.strftime(now, "%Y-%m-%d")  # Default to_date if not set. Format: YYYY-MM-DD.
-balance = 124795.70  # Starting balance from implementation (2016-10-01).
-
-filtered = True  # If True, shows Statement data from from_date to to_date.
-test_mode = False  # Shows test values in Summary tab.
-
 num = 32
 in_bank = 99510.20  # Currently not in use.
+balance = 124795.70  # Starting balance from implementation (2016-10-01).
+
+filtered = True  # If True, shows Statement tab data from from_date to to_date.
+test_mode = True  # If True, shows test values in Summary tab.
+
+now = datetime.now()  # Defines current datetime. Do not change.
+choice = now  # Defines filter choice in Statement tab.
+from_date = date(choice.year, choice.month, 1).strftime("%Y-%m-%d")
+to_date = date(choice.year, choice.month, monthrange(choice.year, choice.month)[1]).strftime("%Y-%m-%d")
 
 
 # Methods
@@ -31,13 +33,15 @@ def statement_filter(request):
     " Set filters for Statement "
     global from_date
     global to_date
+    global choice
     if request.method == "POST":
-        form = forms.StatementForm(request.POST)
-        from_date = form.data['from_date']
-        to_date = form.data['to_date']
+        form = forms.StatementFilterForm(request.POST)
+        choice = form.data['month']
+        from_date = datetime.strptime(choice, "%Y-%m-%d")
+        to_date = datetime.strptime(choice, "%Y-%m-%d").replace(day=monthrange(from_date.year, from_date.month)[1])
     else:
-        form = forms.StatementForm()
-    return form, from_date, to_date
+        form = forms.StatementFilterForm()
+    return form, choice, from_date, to_date
 
 
 def parse_date(iso_date):
@@ -209,6 +213,26 @@ def list_types():
         type_details['outflow'] = sum_type(CashOutflow, account_type)
         type_list.append(type_details)
     return type_list
+
+
+def list_months():
+    " List months with cash flows "
+    month_list = []
+    for month in CashInflow.objects.dates('date', 'month'):
+        month_item = []
+        month_item.append(month)
+        month_item.append(month.strftime("%B %Y"))
+        month_item_tuple = tuple(month_item)
+        month_list.append(month_item_tuple)
+    for month in CashOutflow.objects.dates('date', 'month'):
+        month_item = []
+        month_item.append(month)
+        month_item.append(month.strftime("%B %Y"))
+        month_item_tuple = tuple(month_item)
+        month_list.append(month_item_tuple)
+    seq = list(set(month_list))
+    seen = set()
+    return [x for x in seq if x not in seen and not seen.add(x)]
 
 
 def test_function():
