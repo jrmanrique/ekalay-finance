@@ -1,9 +1,8 @@
 from django.contrib.auth.models import Group
 from django.db.models import Q
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response  # Currently not in use.
 
 from finance.models import AccountTypes, CashInflow, CashOutflow, ChartOfAccounts
 from .serializers import CashInflowSerializer, CashInflowCreateSerializer, CashInflowEditSerializer
@@ -56,7 +55,7 @@ class FlowPageNumberPagination(PageNumberPagination):
 class CashInflowList(generics.ListAPIView):
     serializer_class = CashInflowSerializer
     permission_classes = [permissions.IsAdminUser]
-    filter_backends =  [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['ref_num', 'account_title', 'flow_type', 'payor', 'document', 'notes']
     pagination_class = FlowPageNumberPagination
 

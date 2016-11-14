@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^view/$', views.index, name='view'),
     url(r'^add/$', views.FlowAdd.as_view(), name='add'),
-    url(r'^reload/$', views.reload_db, name='reload'),
+    url(r'^statement/$', views.statement, name='statement'),
 
     # /finance/inflows/
     url(r'^inflows/edit/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.InflowEdit.as_view(), name='inflow-edit'),
@@ -17,11 +17,11 @@ urlpatterns = [
     url(r'^outflows/edit/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.OutflowEdit.as_view(), name='outflow-edit'),
     url(r'^outflows/delete/(?P<pk>\d+)/(?P<slug>[-\w]*)/$', views.outflow_delete, name='outflow-delete'),
 
-    # /finance/statements/
-    url(r'^statement/$', views.statement, name='statement'),
-
     # /finance/admin/
     url(r'^admin/$', views.FinAdmin.as_view(), name='finadmin'),
     url(r'^admin/edit/(?P<pk>\d+)/(?P<ref_num>\d+)$', views.FinAdminEdit.as_view(), name='finadmin-edit'),
     url(r'^admin/delete/(?P<pk>\d+)/(?P<ref_num>\d+)$', views.FinAdminDelete.as_view(), name='finadmin-delete'),
+
+    # /finance/debug/reload
+    url(r'^debug/reload/$', views.reload_db, name='reload'),
 ]

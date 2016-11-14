@@ -5,9 +5,6 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 
-# Create your models here.
-
-
 class AccountTypes(models.Model):
     account_type = models.CharField(max_length=100, verbose_name='Account Type')
 

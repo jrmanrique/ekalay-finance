@@ -30,7 +30,7 @@ to_date = date(choice.year, choice.month, monthrange(choice.year, choice.month)[
 
 
 def statement_filter(request):
-    " Set filters for Statement "
+    """ Set filters for Statement tab. """
     global from_date
     global to_date
     global choice
@@ -45,17 +45,17 @@ def statement_filter(request):
 
 
 def parse_date(iso_date):
-    " Parse basic ISO 8601 date-only format into datetime.date format "
+    """ Parse basic ISO 8601 date-only format into datetime.date format. """
     if isinstance(iso_date, str):
         date_obj = datetime.strptime(iso_date, "%Y-%m-%d")
     else:
         date_obj = iso_date
-    parsed_date = datetime.strftime(date_obj,"%d %B %Y")
+    parsed_date = datetime.strftime(date_obj, "%d %B %Y")
     return parsed_date
 
 
 def reload_database():
-    " Reloads the database after modifying models.py "
+    """ Reloads the database after modifying models.py. """
     all_outflows = CashOutflow.objects.all()
     for outflow in all_outflows:
         outflow.save()
@@ -66,7 +66,7 @@ def reload_database():
 
 
 def is_super(user):
-    " Check user access level "
+    """ Check user access level. """
     users_in_council = Group.objects.get(name="Council").user_set.all()
     users_in_finance = Group.objects.get(name="Finance").user_set.all()
     if user.is_superuser:
@@ -81,7 +81,7 @@ def is_super(user):
 
 
 def is_finance(user):
-    " Check user access level "
+    """ Check user access level. """
     users_in_council = Group.objects.get(name="Council").user_set.all()
     users_in_finance = Group.objects.get(name="Finance").user_set.all()
     if user.is_superuser:
@@ -96,7 +96,7 @@ def is_finance(user):
 
 
 def is_council(user):
-    " Check user access level "
+    """ Check user access level. """
     users_in_council = Group.objects.get(name="Council").user_set.all()
     users_in_finance = Group.objects.get(name="Finance").user_set.all()
     if user.is_superuser:
@@ -111,7 +111,7 @@ def is_council(user):
 
 
 def convert_none(value):
-    " Convert Nonetype to 0 "
+    """ Convert Nonetype to 0. """
     if value.get('amount__sum') is None:
         return Decimal(0).quantize(Decimal('.01'))
     else:
@@ -119,7 +119,7 @@ def convert_none(value):
 
 
 def get_field(num, field='account_title'):
-    " Get field from ref_num in models.ChartOfAccounts "
+    """ Get field from ref_num in models.ChartOfAccounts. """
     try:
         field = ChartOfAccounts.objects.values().get(ref_num=num).get(field)
     except ObjectDoesNotExist:
@@ -128,7 +128,7 @@ def get_field(num, field='account_title'):
 
 
 def get_type(num):
-    " Get account_type from ref_num in models.ChartOfAccounts "
+    """ Get account_type from ref_num in models.ChartOfAccounts. """
     try:
         field_id = ChartOfAccounts.objects.values().get(ref_num=num).get('account_type_id')
         field = AccountTypes.objects.values().get(id=field_id).get('account_type')
@@ -138,7 +138,7 @@ def get_type(num):
 
 
 def get_balance():
-    " Get previous balance for filtering "
+    """ Get previous balance for filtering. """
     prev_inflow = CashInflow.objects.filter(date__lt=from_date).aggregate(Sum('amount'))
     prev_outflow = CashOutflow.objects.filter(date__lt=from_date).aggregate(Sum('amount'))
     if filtered:
@@ -149,7 +149,7 @@ def get_balance():
 
 
 def sum_flow(model):
-    " Get sum of amount in model "
+    """ Get sum of amount in model. """
     if filtered:
         sum = model.objects.exclude(date__gt=to_date).filter(date__gte=from_date).aggregate(Sum('amount'))
     else:
@@ -158,7 +158,7 @@ def sum_flow(model):
 
 
 def sum_type(model, account_type):
-    " Get sum of amount of flow_type in model "
+    """ Get sum of amount of flow_type in model. """
     if filtered:
         flow = model.objects.exclude(date__gt=to_date).filter(date__gte=from_date, flow_type=account_type).aggregate(Sum('amount'))
     else:
@@ -167,13 +167,13 @@ def sum_type(model, account_type):
 
 
 def sum_type_net(account_type):
-    " Get net sum of amount of flow_type "
+    """ Get net sum of amount of flow_type. """
     net_sum = sum_type(CashInflow, account_type) - sum_type(CashOutflow, account_type)
     return net_sum
 
 
 def sum_refnum(model, num):
-    " Get sum of amount of ref_num in model "
+    """ Get sum of amount of ref_num in model. """
     if filtered:
         flow = model.objects.exclude(date__gt=to_date).filter(date__gte=from_date, ref_num=num).aggregate(Sum('amount'))
     else:
@@ -182,13 +182,13 @@ def sum_refnum(model, num):
 
 
 def sum_refnum_net(num):
-    " Get net sum of amount of ref_num "
+    """ Get net sum of amount of ref_num. """
     sum = sum_refnum(CashInflow, num)-sum_refnum(CashOutflow, num)
     return sum
 
 
 def list_accounts():
-    " List accounts with respective balances "
+    """ List accounts with respective balances. """
     account_list = []
     for account in ChartOfAccounts.objects.order_by('ref_num'):
         account_details = {}
@@ -203,7 +203,7 @@ def list_accounts():
 
 
 def list_types():
-    " List account_types with respective balances "
+    """ List account_types with respective balances. """
     type_list = []
     for account_type in AccountTypes.objects.all():
         type_details = {}
@@ -216,7 +216,7 @@ def list_types():
 
 
 def list_months():
-    " List months with cash flows "
+    """ List months with cash flows for filtering. """
     month_list = []
     for month in CashInflow.objects.dates('date', 'month'):
         month_item = []
@@ -236,7 +236,7 @@ def list_months():
 
 
 def test_function():
-    " Test your function "
+    """ Test function. """
     prev_inflow = CashInflow.objects.filter(date__lte=from_date).aggregate(Sum('amount'))
     prev_outflow = CashOutflow.objects.filter(date__lte=from_date).aggregate(Sum('amount'))
     if filtered:
